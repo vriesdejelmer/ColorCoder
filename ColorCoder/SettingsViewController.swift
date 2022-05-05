@@ -59,9 +59,6 @@ class SettingsViewController: SubCompViewController {
         if item == .backgroundGray || item == .sizeFactor || item == .eccentricityFactor {
             self.addSlider(to: settingBlock, type: item)
         }
-//        else if item == .paddle2Type || item == .paddle1Type {
-//            self.addSegmentedControl(to: settingBlock, type: item)
-//        }
         
         return settingBlock
     }
@@ -88,84 +85,25 @@ class SettingsViewController: SubCompViewController {
 
         switch type {
         case .backgroundGray: slider.value = Float(GeneralSettings.backgroundGray)
-        case .eccentricityFactor: slider.value = Float(GeneralSettings.eccentricityFactor)
-        case .sizeFactor: slider.value = Float(GeneralSettings.sizeFactor)
-        default: break
+        case .eccentricityFactor: slider.value = Float(GeneralSettings.stimEccFactor)
+        case .sizeFactor: slider.value = Float(GeneralSettings.stimDiamFactor)
         }
 
         slider.addTarget(self, action: #selector(SettingsViewController.sliderAction(_:)), for: .valueChanged)
     }
     
-    func addSegmentedControl(to block: UIView, type: SettingsItem) {
-//        let optionList = self.getPaddleList()
-//        let segmentedControl = UISegmentedControl(items: optionList)
-//
-//        for (index, option) in optionList.enumerated() {
-//            if type == .paddle1Type && GeneralSettings.paddle1Type.rawValue == option {
-//                segmentedControl.selectedSegmentIndex = index
-//            }
-//            if type == .paddle2Type && GeneralSettings.paddle2Type.rawValue == option {
-//                segmentedControl.selectedSegmentIndex = index
-//            }
-//        }
-//
-//        if #available(iOS 13.0, *) {
-//            segmentedControl.selectedSegmentTintColor = .systemBlue
-//            segmentedControl.setTitleTextAttributes([.font: UIFont.init(name: "Arial", size: 16)], for: .normal)
-//            segmentedControl.setTitleTextAttributes([.foregroundColor: UIColor.white, .font: UIFont.init(name: "Arial", size: 20)], for: .selected)
-//
-//        } else {
-//            // Fallback on earlier versions
-//        }
-//        segmentedControl.translatesAutoresizingMaskIntoConstraints    = false
-//        segmentedControl.accessibilityIdentifier = type.rawValue
-//        addHeightConstraint(itemHeight, to: segmentedControl)
-//
-//        block.addSubview(segmentedControl)
-//        segmentedControl.bottomAnchor.constraint(equalTo: block.bottomAnchor, constant: -10).isActive  = true
-//        segmentedControl.leftAnchor.constraint(equalTo: block.leftAnchor, constant: 10).isActive = true
-//        segmentedControl.rightAnchor.constraint(equalTo: block.rightAnchor, constant: -10).isActive = true
-//
-//        segmentedControl.addTarget(self, action: #selector(Self.segmentAction(_:)), for: .valueChanged)
-        
-    }
-    
-    func getPaddleList() -> [String] {
-        var optionList = [String]()
-        for type in PaddleType.allCases {
-            optionList.append(type.rawValue)
-        }
-        return optionList
-    }
-    
-    @objc func segmentAction(_ sender: UISegmentedControl) {
-        if let setting = SettingsItem(rawValue: sender.accessibilityIdentifier ?? "") {
-//            if let paddleSelection = PaddleType(rawValue: sender.titleForSegment(at: sender.selectedSegmentIndex) ?? "") {
-//                if setting == .paddle1Type {
-//                    GeneralSettings.paddle1Type = paddleSelection
-//                } else if setting == .paddle2Type {
-//                    GeneralSettings.paddle2Type = paddleSelection
-//                }
-//            }
-        }
-    }
-    
+   
+
     @objc func sliderAction(_ sender: UISlider){
         
         
         if let identifier = sender.accessibilityIdentifier, let item = SettingsItem(rawValue: identifier) {
             switch item {
             case .backgroundGray: GeneralSettings.backgroundGray = CGFloat(sender.value)
-            case .eccentricityFactor: GeneralSettings.eccentricityFactor = CGFloat(sender.value)
-            case .sizeFactor: GeneralSettings.sizeFactor = CGFloat(sender.value)
-            default: break
+            case .eccentricityFactor: GeneralSettings.stimEccFactor = CGFloat(sender.value)
+            case .sizeFactor: GeneralSettings.stimDiamFactor = CGFloat(sender.value)
             }
         }
-//        let minimumValue    = CGFloat(sliderRange.min()!)
-//        let sliderValue     = CGFloat(sender.value)
-//        let newValue        = round((sliderValue - minimumValue)/sliderStep)*sliderStep+minimumValue
-//        self.label.text     = title + " \(newValue)"
-//        delegate?.setNewPropertyValue(ElementProperty(floatValue: newValue, type: selectionType))
     }
     
 }

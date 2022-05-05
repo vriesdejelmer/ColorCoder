@@ -10,14 +10,16 @@
 		3D42F4F8233FC23700129757 /* UIKitExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D42F4F7233FC23700129757 /* UIKitExtensions.swift */; };
 		3D42F4FA233FC25A00129757 /* DataStructs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D42F4F9233FC25A00129757 /* DataStructs.swift */; };
 		3D42F4FC233FC2B200129757 /* UIKitConstraintFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D42F4FB233FC2B200129757 /* UIKitConstraintFunctions.swift */; };
-		3D42F4FE233FC37300129757 /* GameSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D42F4FD233FC37300129757 /* GameSettings.swift */; };
-		3D42F500233FC38800129757 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D42F4FF233FC38800129757 /* Constants.swift */; };
 		3D42F502233FEFFE00129757 /* GeometricFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D42F501233FEFFE00129757 /* GeometricFunctions.swift */; };
 		3D42F5052340047B00129757 /* LLPIXEL3.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3D42F504233FFE7800129757 /* LLPIXEL3.ttf */; };
-		3D430E0E2815C86100D541E6 /* UserDataVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D430E0D2815C86100D541E6 /* UserDataVC.swift */; };
+		3D430E0E2815C86100D541E6 /* UserEntryController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D430E0D2815C86100D541E6 /* UserEntryController.swift */; };
 		3D430E12281607E100D541E6 /* ExperimentScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D430E11281607E100D541E6 /* ExperimentScene.swift */; };
 		3D430E142816082300D541E6 /* GameNodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D430E132816082300D541E6 /* GameNodes.swift */; };
 		3D430E16281608C700D541E6 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D430E15281608C700D541E6 /* GameScene.swift */; };
+		3D79B48E282176ED006B5F66 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D79B48D282176EC006B5F66 /* DataManager.swift */; };
+		3D79B491282192D2006B5F66 /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D79B490282192D2006B5F66 /* UserProfile.swift */; };
+		3D79B493282192E3006B5F66 /* ExperimentData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D79B492282192E3006B5F66 /* ExperimentData.swift */; };
+		3D79B49628219328006B5F66 /* UserSetupController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D79B49528219328006B5F66 /* UserSetupController.swift */; };
 		3DDC5028233BEF430065CBAE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DDC5027233BEF430065CBAE /* AppDelegate.swift */; };
 		3DDC502A233BEF430065CBAE /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DDC5029233BEF430065CBAE /* MenuViewController.swift */; };
 		3DDC502D233BEF430065CBAE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3DDC502B233BEF430065CBAE /* Main.storyboard */; };
@@ -29,20 +31,23 @@
 		3DDC5041233CCF650065CBAE /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DDC5040233CCF650065CBAE /* AboutViewController.swift */; };
 		3DDC5043233CE34B0065CBAE /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DDC5042233CE34B0065CBAE /* GameViewController.swift */; };
 		3DDC5045233CE3980065CBAE /* PracticeScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DDC5044233CE3980065CBAE /* PracticeScene.swift */; };
+		3DF35330281D7B8800983C0B /* UserSelectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DF3532F281D7B8800983C0B /* UserSelectionController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		3D42F4F7233FC23700129757 /* UIKitExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIKitExtensions.swift; sourceTree = "<group>"; };
 		3D42F4F9233FC25A00129757 /* DataStructs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStructs.swift; sourceTree = "<group>"; };
 		3D42F4FB233FC2B200129757 /* UIKitConstraintFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIKitConstraintFunctions.swift; sourceTree = "<group>"; };
-		3D42F4FD233FC37300129757 /* GameSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameSettings.swift; sourceTree = "<group>"; };
-		3D42F4FF233FC38800129757 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		3D42F501233FEFFE00129757 /* GeometricFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeometricFunctions.swift; sourceTree = "<group>"; };
 		3D42F504233FFE7800129757 /* LLPIXEL3.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = LLPIXEL3.ttf; sourceTree = "<group>"; };
-		3D430E0D2815C86100D541E6 /* UserDataVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDataVC.swift; sourceTree = "<group>"; };
+		3D430E0D2815C86100D541E6 /* UserEntryController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserEntryController.swift; sourceTree = "<group>"; };
 		3D430E11281607E100D541E6 /* ExperimentScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExperimentScene.swift; sourceTree = "<group>"; };
 		3D430E132816082300D541E6 /* GameNodes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameNodes.swift; sourceTree = "<group>"; };
 		3D430E15281608C700D541E6 /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
+		3D79B48D282176EC006B5F66 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
+		3D79B490282192D2006B5F66 /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
+		3D79B492282192E3006B5F66 /* ExperimentData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExperimentData.swift; sourceTree = "<group>"; };
+		3D79B49528219328006B5F66 /* UserSetupController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSetupController.swift; sourceTree = "<group>"; };
 		3DDC5024233BEF430065CBAE /* ColorCoder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ColorCoder.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3DDC5027233BEF430065CBAE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3DDC5029233BEF430065CBAE /* MenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
@@ -56,6 +61,7 @@
 		3DDC5040233CCF650065CBAE /* AboutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
 		3DDC5042233CE34B0065CBAE /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
 		3DDC5044233CE3980065CBAE /* PracticeScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PracticeScene.swift; sourceTree = "<group>"; };
+		3DF3532F281D7B8800983C0B /* UserSelectionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSelectionController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,8 +82,6 @@
 				3DDC503E233CCB9B0065CBAE /* ExitButton.swift */,
 				3D42F4F9233FC25A00129757 /* DataStructs.swift */,
 				3D42F4FB233FC2B200129757 /* UIKitConstraintFunctions.swift */,
-				3D42F4FD233FC37300129757 /* GameSettings.swift */,
-				3D42F4FF233FC38800129757 /* Constants.swift */,
 				3D42F501233FEFFE00129757 /* GeometricFunctions.swift */,
 			);
 			path = GeneralFunctionality;
@@ -92,6 +96,26 @@
 				3DDC5033233BEF430065CBAE /* Info.plist */,
 			);
 			path = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		3D79B48F282192AE006B5F66 /* UserData */ = {
+			isa = PBXGroup;
+			children = (
+				3D79B48D282176EC006B5F66 /* DataManager.swift */,
+				3D79B490282192D2006B5F66 /* UserProfile.swift */,
+				3D79B492282192E3006B5F66 /* ExperimentData.swift */,
+			);
+			path = UserData;
+			sourceTree = "<group>";
+		};
+		3D79B49428219300006B5F66 /* UserEntryControlling */ = {
+			isa = PBXGroup;
+			children = (
+				3DF3532F281D7B8800983C0B /* UserSelectionController.swift */,
+				3D430E0D2815C86100D541E6 /* UserEntryController.swift */,
+				3D79B49528219328006B5F66 /* UserSetupController.swift */,
+			);
+			path = UserEntryControlling;
 			sourceTree = "<group>";
 		};
 		3DDC501B233BEF430065CBAE = {
@@ -117,6 +141,7 @@
 				3D42F4F6233FC21A00129757 /* GeneralFunctionality */,
 				3DDC5039233BF4A40065CBAE /* ColorPicking */,
 				3DDC5027233BEF430065CBAE /* AppDelegate.swift */,
+				3D79B48F282192AE006B5F66 /* UserData */,
 				3DDC5029233BEF430065CBAE /* MenuViewController.swift */,
 				3DDC503A233CA1BC0065CBAE /* SettingsViewController.swift */,
 				3DDC502B233BEF430065CBAE /* Main.storyboard */,
@@ -129,9 +154,9 @@
 		3DDC5039233BF4A40065CBAE /* ColorPicking */ = {
 			isa = PBXGroup;
 			children = (
+				3D79B49428219300006B5F66 /* UserEntryControlling */,
 				3DDC5042233CE34B0065CBAE /* GameViewController.swift */,
 				3DDC5044233CE3980065CBAE /* PracticeScene.swift */,
-				3D430E0D2815C86100D541E6 /* UserDataVC.swift */,
 				3D430E11281607E100D541E6 /* ExperimentScene.swift */,
 				3D430E132816082300D541E6 /* GameNodes.swift */,
 				3D430E15281608C700D541E6 /* GameScene.swift */,
@@ -212,21 +237,24 @@
 			buildActionMask = 2147483647;
 			files = (
 				3DDC5043233CE34B0065CBAE /* GameViewController.swift in Sources */,
-				3D42F500233FC38800129757 /* Constants.swift in Sources */,
+				3D79B48E282176ED006B5F66 /* DataManager.swift in Sources */,
+				3D79B491282192D2006B5F66 /* UserProfile.swift in Sources */,
 				3DDC5041233CCF650065CBAE /* AboutViewController.swift in Sources */,
+				3DF35330281D7B8800983C0B /* UserSelectionController.swift in Sources */,
 				3D430E142816082300D541E6 /* GameNodes.swift in Sources */,
 				3D42F4FA233FC25A00129757 /* DataStructs.swift in Sources */,
 				3D42F4FC233FC2B200129757 /* UIKitConstraintFunctions.swift in Sources */,
+				3D79B49628219328006B5F66 /* UserSetupController.swift in Sources */,
 				3D42F502233FEFFE00129757 /* GeometricFunctions.swift in Sources */,
+				3D79B493282192E3006B5F66 /* ExperimentData.swift in Sources */,
 				3D42F4F8233FC23700129757 /* UIKitExtensions.swift in Sources */,
 				3DDC5045233CE3980065CBAE /* PracticeScene.swift in Sources */,
 				3D430E12281607E100D541E6 /* ExperimentScene.swift in Sources */,
 				3DDC503F233CCB9B0065CBAE /* ExitButton.swift in Sources */,
 				3DDC503B233CA1BC0065CBAE /* SettingsViewController.swift in Sources */,
 				3D430E16281608C700D541E6 /* GameScene.swift in Sources */,
-				3D42F4FE233FC37300129757 /* GameSettings.swift in Sources */,
 				3DDC502A233BEF430065CBAE /* MenuViewController.swift in Sources */,
-				3D430E0E2815C86100D541E6 /* UserDataVC.swift in Sources */,
+				3D430E0E2815C86100D541E6 /* UserEntryController.swift in Sources */,
 				3DDC5028233BEF430065CBAE /* AppDelegate.swift in Sources */,
 				3DDC503D233CA2580065CBAE /* GeneralSettings.swift in Sources */,
 			);

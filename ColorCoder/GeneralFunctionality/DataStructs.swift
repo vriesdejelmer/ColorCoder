@@ -24,10 +24,9 @@ enum SettingsItem: String {
     }
 }
 
-
-enum ExperimentProperty: String, Codable {
+enum ExperimentParameter: String, Codable {
     
-    case age, initials, sex, targetSteps, nodeSteps
+    case age, initials, sex, targetSteps, nodeSteps, backgroundShade, nodeDiameter, nodeEccentricity
 
     var displayName: String {
         switch self {
@@ -36,6 +35,9 @@ enum ExperimentProperty: String, Codable {
         case .sex: return "Participant sex?"
         case .targetSteps: return "Target Steps"
         case .nodeSteps: return "Node Steps"
+        case .nodeEccentricity: return "Node Eccentricity"
+        case .nodeDiameter: return "Node Diameter"
+        case .backgroundShade: return "Background Grey Level"
         }
     }
     
@@ -46,25 +48,25 @@ enum ExperimentProperty: String, Codable {
         case .sex: return "(M, F, O)"
         case .targetSteps: return "(experimenter only)"
         case .nodeSteps: return "(experimenter only)"
+        case .nodeEccentricity: return "(experimenter only)"
+        case .nodeDiameter: return "(experimenter only)"
+        case .backgroundShade: return "(experimenter only)"
         }
     }
     
     var hasDefault: Bool {
-        return self == .targetSteps || self == .nodeSteps
+        return self == .targetSteps || self == .nodeSteps || self == .backgroundShade || self == .nodeDiameter || self == .nodeEccentricity
     }
     
     func getDefault() -> String {
         switch self {
-        case .targetSteps: return "40"
-        case .nodeSteps: return "30"
+        case .targetSteps: return "35"
+        case .nodeSteps: return "35"
+        case .backgroundShade: return "\(GeneralSettings.backgroundGray)"
+        case .nodeDiameter: return "\(GeneralSettings.nodeDiameter)"
+        case .nodeEccentricity: return "\(GeneralSettings.nodeEccentricity)"
         default: return ""
         }
     }
 }
 
-
-public enum PaddleType: String, CaseIterable {
-    
-    case regularPaddle = "Regular", irregularPaddle = "Irregular", soapPaddle = "Soap"
-    
-}

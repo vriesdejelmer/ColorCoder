@@ -19,10 +19,12 @@ class GameViewController: SubCompViewController, ExitDelegate {
     var colorScore: UILabel!
     let trialPrefix = "Trial: "
     let trialFont = "LLPixel"
-    var activityVC: UIActivityViewController?
     var experimentMode: ExperimentMode!
-    var userInfo: [ExperimentProperty: String]?
+    weak var dataDelegate: DataDelegate?
+    var userProfile: UserProfile?
+    var experimentData: ExperimentData?
     var alert: UIAlertController?
+    var scene: GameScene!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,7 +45,9 @@ class GameViewController: SubCompViewController, ExitDelegate {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        
+        if let expScene = self.scene as? ExperimentScene {
+            self.dataDelegate?.saveProgress(expScene.experimentData)
+        }
         NotificationCenter.default.removeObserver(self)
     }
 
@@ -57,6 +61,7 @@ class GameViewController: SubCompViewController, ExitDelegate {
         }
         
         self.gameView.translatesAutoresizingMaskIntoConstraints = false
+
         addViewWithInsets(self.gameView, superView: self.view, insets: UIEdgeInsets(top: 50, left: 50, bottom: 50, right: 50))
         self.view.sendSubviewToBack(self.gameView)
     }
@@ -82,23 +87,24 @@ class GameViewController: SubCompViewController, ExitDelegate {
     func createGameScene() {
         let screenRect  = UIScreen.main.fixedCoordinateSpace.bounds
 
-        let scene: GameScene
         if self.experimentMode == .practice {
-            scene = PracticeScene(size: view.bounds.size)
-            (scene as! PracticeScene).viewDelegate = self
+            self.scene = PracticeScene(size: view.bounds.size)
+            
         } else {
-            scene = ExperimentScene(size: view.bounds.size)
-            if let userInfo = self.userInfo {
-                (scene as! ExperimentScene).experimentData = ExperimentData(userInfo)
+            self.scene = ExperimentScene(size: view.bounds.size)
+            if let expData = self.experimentData {
+                (self.scene as! ExperimentScene).experimentData = expData
+                (self.scene as! ExperimentScene).dataDelegate = self.dataDelegate
             }
         }
          
-        scene.exitDelegate = self
-        scene.setOrientation(to: screenRect.size)
+        self.scene.displayDelegate = self
+        self.scene.exitDelegate = self
+        self.scene.setOrientation(to: screenRect.size)
         self.gameView.ignoresSiblingOrder   = true
-        scene.scaleMode                     = .resizeFill
+        self.scene.scaleMode                     = .resizeFill
         self.view.backgroundColor           = GeneralSettings.backgroundColor
-        self.gameView.presentScene(scene)
+        self.gameView.presentScene(self.scene)
 
     }
 
@@ -106,41 +112,17 @@ class GameViewController: SubCompViewController, ExitDelegate {
         return .all
     }
     
-    func closeSessions(_ fileURL: URL?) {
+    func closeSession() {
+        let completeAlert = UIAlertController(title: "Experiment Complete", message: "You have completed the experiment, thank you for your participation", preferredStyle: .alert)
 
-        if let url = fileURL {
-            do {
-                let _ = try Data(contentsOf: url)
-                
-                self.activityVC = UIActivityViewController(activityItems: ["Something", url], applicationActivities: nil)
-                if let activityVC = activityVC {
-                    activityVC.popoverPresentationController?.sourceView = self.gameView
-                    activityVC.excludedActivityTypes = [.addToReadingList, .openInIBooks, .print, .copyToPasteboard]
-
-                    activityVC.popoverPresentationController?.sourceRect = CGRect(origin: self.gameView.bounds.center, size: .zero)
-                    activityVC.popoverPresentationController?.permittedArrowDirections = []
-                    activityVC.completionWithItemsHandler = { [weak self] (_,_,_, error: Error?) in
-                        self?.activityVC = nil
-                        self?.dismiss(animated: true)
-                    }
-                    
-                    self.present(activityVC, animated: true, completion: nil)
-                }
-                //
-            } catch {
-                self.dismiss(animated: true)
-            }
-        } else {
+        completeAlert.addAction(UIAlertAction(title: "Finally!", style: .default) {_ in
             self.dismiss(animated: true)
-        }
-    }
-        
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
+        })
 
-        self.activityVC?.popoverPresentationController?.sourceRect = CGRect(origin: self.gameView.center, size: .zero)
+        self.present(completeAlert, animated: false)
+        
     }
-    
+  
     @objc func deviceOrientationDidChange(_ notification: Notification) {
         self.displayWarningIfNeeded()
     }
@@ -148,25 +130,51 @@ class GameViewController: SubCompViewController, ExitDelegate {
     func displayWarningIfNeeded() {
         if self.experimentMode == .experiment {
             let orientation = UIDevice.current.orientation
-            if orientation != .landscapeLeft && orientation != .landscapeRight {
-                self.alert = UIAlertController(title: "Wrong Orientation", message: "The Experiment should be performed whilest keeping the ipad in Landscape mode, please rotate the ipad correctly", preferredStyle: .alert )
-                self.present(self.alert!, animated: true)
+            if !(orientation == .landscapeLeft || orientation == .landscapeRight) {
+                if alert == nil {
+                    self.alert = UIAlertController(title: "Wrong Orientation", message: "The Experiment should be performed whilest keeping the ipad in Landscape mode, please rotate the ipad correctly", preferredStyle: .alert )
+                    self.present(self.alert!, animated: false)
+                }
             } else {
                 if let alert = self.alert {
-                    alert.dismiss(animated: true)
+                    alert.dismiss(animated: false) {
+                        self.alert = nil
+                    }
                 }
             }
         }
     }
     
+
+    
 }
 
-public protocol ExitDelegate: AnyObject {
-    func closeSessions(_ fileURL: URL?)
-}
+extension GameViewController: DisplayDelegate {
 
-extension GameViewController: CoderViewContainer {
     func updateTrialCount(to score: Int) {
         self.colorScore.text = trialPrefix + String(score)
     }
+
+    func showInstructions() {
+        let instructionAlert = UIAlertController(title: "Instructions, Please Read", message: "Welcome to the experiment! Each trial starts upon placing the finger in the center ring, which will change in color. Upon this color change, please select, from the surroundings disks, the disk that is most similar (?) in color. While it is not important to be as fast as possible, please do not overthink and try to respond promptly.", preferredStyle: .alert)
+
+        instructionAlert.addAction(UIAlertAction(title: "OK", style: .default))
+
+        self.present(instructionAlert, animated: false)
+    }
+    
+    func displayProgress(trialNumber: Int, trialsLeft: Int) {
+        let progressAlert = UIAlertController(title: "Progress Report", message: "You have completed \(trialNumber) trials and have \(trialsLeft) trials left. You can take a break at any time by closing the game using the cross in the top right corner of the screen and restarting by going to the existing user tab and selecting your initials from the list", preferredStyle: .alert)
+
+        progressAlert.addAction(UIAlertAction(title: "OK", style: .default))
+
+        self.present(progressAlert, animated: false)
+    }
+    
 }
+
+
+public protocol ExitDelegate: AnyObject {
+    func closeSession()
+}
+

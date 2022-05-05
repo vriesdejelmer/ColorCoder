@@ -24,25 +24,28 @@ public class GeneralSettings {
         get { return UIColor(white: CGFloat(defaults.float(forKey: SettingsKey.backgroundGray)), alpha: 1.0) }
     }
     
-    public static var eccentricityFactor: CGFloat {
+    public static var stimEccFactor: CGFloat {
         get { return CGFloat(defaults.float(forKey: SettingsKey.eccentricityFactor)) }
         set { defaults.set(Float(newValue), forKey: SettingsKey.eccentricityFactor) }
     }
 
-    public static var nodeEccentrictiy: CGFloat {
+    public static var nodeEccentricity: CGFloat {
         get { return CGFloat(defaults.float(forKey: SettingsKey.eccentricityFactor))*270+120 }
     }
     
-    public static var sizeFactor: CGFloat {
+    public static var stimDiamFactor: CGFloat {
         get { return CGFloat(defaults.float(forKey: SettingsKey.sizeFactor)) }
         set { defaults.set(Float(newValue), forKey: SettingsKey.sizeFactor) }
     }
     
-    public static var nodeSize: CGFloat {
+    public static var nodeDiameter: CGFloat {
         get { return CGFloat(defaults.float(forKey: SettingsKey.sizeFactor))*100+30 }
     }
     
-    
+    public static func getDocumentsDirectory() -> URL? {
+        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        return paths.first
+    }
     
     public static let aboutText: String = "Unfortunately for those looking for a psychadelic version of Pong this app was created for the purpose of measuring eye movements and studying the possiblity of communicating eye movement behavior from one player to another."
 

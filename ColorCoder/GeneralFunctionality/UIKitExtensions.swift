@@ -67,10 +67,10 @@ class SubCompViewController: BaseViewController {
         exitButton.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -16).isActive  = true
         exitButton.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 16).isActive    = true
 
-        exitButton.addTarget(self, action: #selector(SettingsViewController.closeSettings), for: .touchUpInside)
+        exitButton.addTarget(self, action: #selector(SettingsViewController.closeController), for: .touchUpInside)
     }
 
-    @objc func closeSettings() {
+    @objc func closeController() {
         self.dismiss(animated: true, completion: nil)
     }
 

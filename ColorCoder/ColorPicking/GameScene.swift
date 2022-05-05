@@ -12,7 +12,10 @@ class GameScene: SKScene, ChoiceDelegate, GameDelegate {
 
     var colorTarget: SKNode!
     weak var exitDelegate: ExitDelegate?
+    weak var displayDelegate: DisplayDelegate?
     var colorChoices = [ColorClickNode]()
+    
+    var leftRotation: Bool = true
     
     var centerNode: ColorControlNode!
     
@@ -20,23 +23,22 @@ class GameScene: SKScene, ChoiceDelegate, GameDelegate {
     var setupCompleted   = false
 
         //Sizing
-    let targetDiameter: CGFloat = GeneralSettings.nodeSize
+    let targetDiameter: CGFloat = GeneralSettings.nodeDiameter
     let controlDiameter: CGFloat = 125
-    let centerDistance: CGFloat = GeneralSettings.nodeEccentrictiy
+    let centerDistance: CGFloat = GeneralSettings.nodeEccentricity
     
         //Node specifics
     let numberOfNodes = 7
-    let nodeSteps = 20
-    let targetHueSteps = 50
+    let nodeSteps = 5
+    let targetHueSteps = 5
     
     let shuffleTime = 0.15
     
         //Trial caching
-    var lastIndex: Int?
-    var nextTargetIndex: Int!
-    var startIndex: Int!
-    var nextRandomStep: Int!
-
+    var nextTargetStep: Int!
+    var startIndex: Int = 0
+    var nextNodeStep: Int!
+    
     var centerColor: UIColor {
         return UIColor(white: (GeneralSettings.backgroundGray + 0.5).remainder(dividingBy: 1.0), alpha: 1.0)
     }
@@ -45,7 +47,7 @@ class GameScene: SKScene, ChoiceDelegate, GameDelegate {
         super.didMove(to: view)
         if !self.setupCompleted { self.setupScene() }
     }
-
+    
     func setupScene() {
         self.backgroundColor = GeneralSettings.backgroundColor
         self.initializeNodes()
@@ -96,7 +98,7 @@ class GameScene: SKScene, ChoiceDelegate, GameDelegate {
         
         self.setOrientation(to: self.frame.size)
         self.centerControlNode()
-        if self.setupCompleted && self.nextRandomStep != nil { self.positionAndColorNodes(shuffle: false) }
+        if self.setupCompleted && self.nextNodeStep != nil { self.positionAndColorNodes(shuffle: false) }
     }
 
     func setOrientation(to size: CGSize) {
@@ -108,16 +110,10 @@ class GameScene: SKScene, ChoiceDelegate, GameDelegate {
     }
     
     func setNextTrialParameters() {
-        if let previousSelection = self.lastIndex {
-            self.startIndex = Int.random(in: 0..<self.numberOfNodes)
-            while self.startIndex == previousSelection { startIndex = Int.random(in: 0..<self.numberOfNodes) }
-        } else {
-            self.startIndex = Int.random(in: 0..<self.numberOfNodes)
-        }
-        self.lastIndex = startIndex
-        
-        self.nextRandomStep = Int.random(in: 0..<self.nodeSteps)
-        self.nextTargetIndex = Int.random(in: 0..<self.targetHueSteps)
+        self.startIndex += Int(ceil(Double(self.numberOfNodes)/2))
+       
+        self.nextNodeStep = Int.random(in: 0..<self.nodeSteps)
+        self.nextTargetStep = Int.random(in: 0..<self.targetHueSteps)
     }
     
     func centerControlNode() {
@@ -125,13 +121,24 @@ class GameScene: SKScene, ChoiceDelegate, GameDelegate {
         self.centerNode?.position = midPoint
     }
     
+    func getRotationOffset() -> CGFloat {
+        let rotationOffset: CGFloat
+        if leftRotation { rotationOffset = -(1/CGFloat(self.numberOfNodes-1))/4 }
+        else { rotationOffset = (1/CGFloat(self.numberOfNodes-1))/4 }
+        leftRotation = !leftRotation
+        return rotationOffset
+    }
+    
     func positionAndColorNodes(shuffle: Bool = true) {
         
         let nodeIndices: [Int] = Array(self.startIndex...(self.startIndex+self.numberOfNodes-1)).map { $0 % self.numberOfNodes }
+        let rotationOffset = self.getRotationOffset()
+        
         for (index, nodeIndex) in nodeIndices.enumerated() {
             let node = colorChoices[nodeIndex]
-            node.hue = CGFloat(nodeIndex*self.nodeSteps + self.nextRandomStep)/CGFloat(self.numberOfNodes*self.nodeSteps)
-            let rad = -(CGFloat(index)/CGFloat(self.numberOfNodes-1) * (CGFloat.pi*1.1)) - CGFloat.pi*0.95
+            node.hue = CGFloat(nodeIndex*self.nodeSteps + self.nextNodeStep)/CGFloat(self.numberOfNodes*self.nodeSteps)
+            
+            let rad = -((CGFloat(index)/CGFloat(self.numberOfNodes-1)+rotationOffset) * (CGFloat.pi*1.1)) - CGFloat.pi*0.95
             let x = self.getMidPoint().x + cos(rad) * self.centerDistance
             let y = self.getMidPoint().y + sin(rad) * self.centerDistance
             let nodePosition = CGPoint(x: x, y: y)
@@ -158,15 +165,16 @@ class GameScene: SKScene, ChoiceDelegate, GameDelegate {
     }
     
     func closeSession() {
-        self.exitDelegate?.closeSessions(nil)
+        self.exitDelegate?.closeSession()
     }
     
     func startTrial() {
-        self.centerNode.strokeColor = hsv_to_rgb(h: CGFloat(self.nextTargetIndex)/CGFloat(self.targetHueSteps), s: 1.0, v: 1.0)
+        self.centerNode.strokeColor = hsv_to_rgb(h: CGFloat(self.nextTargetStep)/CGFloat(self.targetHueSteps), s: 1.0, v: 1.0)
         colorChoices.forEach { $0.isUserInteractionEnabled = true }
         self.centerNode.isUserInteractionEnabled = false
         
     }
+    
 }
 
 

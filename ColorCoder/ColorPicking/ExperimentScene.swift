@@ -10,111 +10,100 @@ import SpriteKit
 
 class ExperimentScene: GameScene {
 
+    weak var dataDelegate: DataDelegate?
+    
         //trials
     var trialCounter = 0
     var trialResponses: [Int]!
     
-    var comboArray: [(Int, Int)]!
-    
     var experimentData: ExperimentData!
+    
+        // timing
+    var trialTime: TimeInterval?
+    var trialStartTime: TimeInterval?
 
     override func didMove(to view: SKView) {
-        self.comboArray = self.getComboArray()
-        print(self.comboArray)
-        print(self.comboArray.count)
-        self.trialResponses = [Int](repeating: -2, count: self.comboArray.count)
         view.showsPhysics   = false
         
         super.didMove(to: view)
-    }
-    
-    func getComboArray() -> [(Int,Int)] {
-        let baseHueArray: [Int] = Array(0..<self.targetHueSteps)
-        let nodeArray: [Int] = Array(0..<self.nodeSteps)
-
-        let nodeSelection = Array(nodeArray.map({[Int](repeating: $0, count: baseHueArray.count)}).joined())
-        let hueSelection = [Int](repeating: baseHueArray, count: self.nodeSteps)
         
-        return Array(zip(nodeSelection, hueSelection))
+        print("Still nil \(self.displayDelegate)")
+        self.displayDelegate?.showInstructions()
     }
 
     override func setNextTrialParameters() {
         super.setNextTrialParameters()
         
-        guard let index = comboArray.indices.randomElement() else { return }
-        let (randomStep, targetIndex) = comboArray.remove(at: index)
-        self.nextRandomStep = randomStep
-        self.nextTargetIndex = targetIndex
-        print("Next Target \(self.nextTargetIndex)")
-        print("Next Random Step \(self.nextRandomStep)")
+        print("Do we have trialParam? \(self.experimentData.trialParam)")
+        print(self.trialCounter)
+        if self.trialCounter == 0, let trialParam = self.experimentData.trialParam {
+            print("Do we use them?")
+            self.nextNodeStep = trialParam.nodeStep
+            self.nextTargetStep = trialParam.targetStep
+        } else if let trialParam = self.experimentData.getNextTrialParameters() {
+            self.nextNodeStep = trialParam.nodeStep
+            self.nextTargetStep = trialParam.targetStep
+        }
+        
     }
 
 
     override func selected(_ selectedIndex: Int) {
-        self.experimentData.addTrial(number: trialCounter, targetHue: self.nextTargetIndex, hueOffset: self.nextRandomStep, response: selectedIndex)
 
-        if self.comboArray.isEmpty {
-            self.closeSession()
-        } else {
+        if let startTime = self.trialStartTime {
+            self.trialTime = CFAbsoluteTimeGetCurrent() - startTime
+        }
+        
+        self.experimentData.addTrial(number: trialCounter, targetOffset: self.nextTargetStep, nodeOffset: self.nextNodeStep, trialTime: self.trialTime!, response: selectedIndex)
+
+        if self.experimentData.hasTrialsLeft {
+            if (self.trialCounter+1) % 5 == 0 {
+                self.displayDelegate?.displayProgress(trialNumber: self.trialCounter+1, trialsLeft: self.experimentData.trialsLeft)
+            }
+            
+            self.trialCounter += 1
             super.selected(selectedIndex)
             self.positionAndColorNodes(shuffle: true)
-            self.trialCounter += 1
+            
+            
+            if (self.trialCounter % 10 == 0) {
+                self.dataDelegate?.saveProgress(experimentData)
+            }
+        } else {
+            self.closeSession()
         }
+        
+       
+    }
+    
+    override func startTrial() {
+        super.startTrial()
+        self.trialStartTime = CFAbsoluteTimeGetCurrent()
+        
     }
     
     override func closeSession() {
-             
+           
+            //Clear the scene, necesarry?
         for node in self.children {
             node.removeFromParent()
         }
         
-        if let pathDirectory = getDocumentsDirectory() {
-            let fileName = (experimentData.userInfo[.initials] ?? "untitled") + ".json"
-            let filePath = pathDirectory.appendingPathComponent(fileName)
-            let json = try? JSONEncoder().encode(experimentData)
-            
-            do {
-                try json!.write(to: filePath)
-                self.exitDelegate?.closeSessions(filePath)
-            } catch {
-                self.exitDelegate?.closeSessions(nil)
-            }
-        }
-    }
-
-    func getDocumentsDirectory() -> URL? {
-        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-        return paths.first
+        self.dataDelegate?.saveProgress(experimentData)
+        self.exitDelegate?.closeSession()
     }
     
 }
 
 
-class ExperimentData: Codable {
-    let userInfo: [ExperimentProperty: String]
-    private var trialNumbers: [Int]
-    private var hueOffsets: [Int]
-    private var targetHues: [Int]
-    private var trialResponses: [Int]
-    
-    init(_ userInfo: [ExperimentProperty: String]) {
-        self.userInfo = userInfo
-        self.trialNumbers = [Int]()
-        self.targetHues = [Int]()
-        self.hueOffsets = [Int]()
-        self.trialResponses = [Int]()
-    }
-    
-    func addTrial(number: Int, targetHue: Int, hueOffset: Int, response: Int) {
-        if (trialNumbers.count == hueOffsets.count && trialNumbers.count == trialResponses.count && trialNumbers.count == targetHues.count) {
-            self.trialNumbers.append(number)
-            self.targetHues.append(targetHue)
-            self.trialResponses.append(response)
-            self.hueOffsets.append(hueOffset)
-        } else {
-            fatalError("Crucial Data Collection Error")
-        }
-    }
-    
+protocol DataDelegate: AnyObject {
+    func saveProgress(_ experimentData: ExperimentData)
+    func isExistingUser(_ initials: String) -> Bool
 }
 
+
+protocol DisplayDelegate: AnyObject {
+    func displayProgress(trialNumber: Int, trialsLeft: Int)
+    func updateTrialCount(to score: Int)
+    func showInstructions()
+}

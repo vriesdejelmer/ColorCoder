@@ -8,12 +8,20 @@
 
 import UIKit
 
-class UserDataVC: UITableViewController, UserInfoDelegate {
+class UserEntryController: UITableViewController, UserInfoDelegate {
 
-    let userItems: [ExperimentProperty] = [.initials, .age, .sex, .targetSteps, .nodeSteps]
+    let userItems: [ExperimentParameter] = [.initials, .age, .sex, .targetSteps, .nodeSteps, .nodeDiameter, .nodeEccentricity, .backgroundShade]
     let cellIdentifier = "TitleCell"
-    var userInfo = [ExperimentProperty: String]()
-    weak var gameControllerDelegate: GameControllerDelegate?
+    var expInfo = [ExperimentParameter: String]() {
+        didSet {
+            self.parent?.navigationItem.rightBarButtonItem?.isEnabled = self.allUserItemsFilled
+        }
+    }
+    var allUserItemsFilled: Bool {
+        if self.userItems.allSatisfy({expInfo[$0] != nil && expInfo[$0] != ""}) { return true }
+        return false
+    }
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,8 +30,7 @@ class UserDataVC: UITableViewController, UserInfoDelegate {
         self.tableView.tableFooterView  = UIView()
         self.tableView.dataSource = self
         self.tableView.delegate = self
-        self.title = "Please enter User Data"
-        self.navigationItem.rightBarButtonItem?.isEnabled = false
+        self.title = "New User"
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -47,34 +54,24 @@ class UserDataVC: UITableViewController, UserInfoDelegate {
         return UITableViewCell()
     }
     
-    func updateValue(for item: ExperimentProperty, with value: String) {
-        userInfo[item] = value
-        if userItems.allSatisfy({userInfo[$0] != nil || userInfo[$0] != ""}) {
-            self.navigationItem.rightBarButtonItem?.isEnabled = true
-        }
-        self.gameControllerDelegate?.returnUserInfo(userInfo)
+    func updateValue(for item: ExperimentParameter, with value: String) {
+        expInfo[item] = value
     }
     
 }
-
-protocol UserInfoDelegate: AnyObject {
-    func updateValue(for item: ExperimentProperty, with value: String)
-}
-
-protocol GameControllerDelegate: AnyObject {
-    func returnUserInfo(_ userInfo: [ExperimentProperty: String])
-}
-
 
 class TitleCell: UITableViewCell, UITextFieldDelegate {
 
     let titleLabel: UILabel
     var instructionLabel: UILabel!
-    var userItem: ExperimentProperty! {
+    var userItem: ExperimentParameter! {
         didSet {
             self.titleText = userItem.displayName
             self.instructionLabel.text = self.userItem.instruction
-            if userItem.hasDefault { self.textField.text = userItem.getDefault() }
+            if userItem.hasDefault {
+                self.textField.text = userItem.getDefault()
+                self.userInfDelegate?.updateValue(for: userItem, with: userItem.getDefault())
+            }
         }
     }
     weak var userInfDelegate: UserInfoDelegate?
@@ -82,18 +79,15 @@ class TitleCell: UITableViewCell, UITextFieldDelegate {
     var titleText: String! {
         didSet { self.setTextToTitleLabel() } }
 
-    required init?(coder aDecoder: NSCoder) {
-        self.titleLabel = UILabel()
-        super.init(coder: aDecoder)
-        self.configureCell()
-        
-    }
-
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         self.titleLabel = UILabel()
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.configureCell()
-        
+        self.backgroundColor = .lightGray
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     override func layoutSubviews() {
@@ -105,15 +99,14 @@ class TitleCell: UITableViewCell, UITextFieldDelegate {
         
         self.addTitleLabel()
         self.addTextField()
-        self.contentView.backgroundColor = UIColor(white: 0.9, alpha: 1.0)
-        
+        self.contentView.backgroundColor = .white
         self.constrainElementToContentView()
     }
     
     func addTitleLabel() {
         self.contentView.layer.borderWidth = 2
         self.contentView.layer.borderColor = UIColor(hue: 0.5, saturation: 1.0, brightness: 0.75, alpha: 1.0).cgColor
-        self.contentView.layer.cornerRadius = 5
+        self.contentView.layer.cornerRadius = 15
         self.titleLabel.textAlignment   = .right
         self.titleLabel.translatesAutoresizingMaskIntoConstraints = false
         self.contentView.addSubview(titleLabel)
@@ -181,4 +174,9 @@ class TitleCell: UITableViewCell, UITextFieldDelegate {
         titleLabel.text = titleText
         titleLabel.sizeToFit()
     }
+}
+
+
+protocol UserInfoDelegate: AnyObject {
+    func updateValue(for item: ExperimentParameter, with value: String)
 }

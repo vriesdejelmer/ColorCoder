@@ -8,12 +8,11 @@
 
 import UIKit
 
-class MenuViewController: BaseViewController, GameControllerDelegate {
+class MenuViewController: BaseViewController {
 
     let buttonList: [ControlItem] = [.practice, .play, .settings, .about]
-    
+    var dataManager: DataManager!
     var encapsulatingNC: UINavigationController?
-    var userInfo: [ExperimentProperty: String]?
 
     @IBOutlet weak var controlStack: UIStackView! {
         didSet {
@@ -23,7 +22,7 @@ class MenuViewController: BaseViewController, GameControllerDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        self.dataManager = DataManager()
     }
 
     func setupControlButtons() {
@@ -55,36 +54,6 @@ class MenuViewController: BaseViewController, GameControllerDelegate {
         case .about: self.pushAboutController()
         }
     }
-
-    func pushGameController() {
-        let gameController  = GameViewController()
-        gameController.experimentMode = .practice
-        gameController.modalPresentationStyle = .fullScreen
-        self.present(gameController, animated: true, completion: nil)
-    }
-
-    func runExperiment() {
-        let observerQuestionaire = UserDataVC()
-        observerQuestionaire.gameControllerDelegate = self
-        observerQuestionaire.modalPresentationStyle = .formSheet
-        self.encapsulatingNC = UINavigationController(rootViewController: observerQuestionaire)
-        let rightButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(MenuViewController.finished(_:)))
-        
-        observerQuestionaire.navigationItem.setRightBarButton(rightButton, animated: false)
-        self.present(self.encapsulatingNC!, animated: true, completion: nil)
-    }
-                                                                      
-    @objc func finished(_ sender: UIBarButtonItem) {
-        self.encapsulatingNC?.dismiss(animated: true)
-        let gameController  = GameViewController()
-        gameController.experimentMode = .experiment
-        print("=================")
-        print(self.userInfo)
-        gameController.userInfo = self.userInfo
-        gameController.modalPresentationStyle = .fullScreen
-        self.present(gameController, animated: true, completion: nil)
-    }
-                                                                            
     
     func pushSettingsController() {
         let settingsController  = SettingsViewController()
@@ -95,9 +64,49 @@ class MenuViewController: BaseViewController, GameControllerDelegate {
         let aboutController     = AboutViewController()
         self.present(aboutController, animated: true, completion: nil)
     }
+}
+
+extension MenuViewController: ExperimentRunDelegate {
     
-    func returnUserInfo(_ userInfo: [ExperimentProperty: String]) {
-        self.userInfo = userInfo
+    
+    func pushGameController() {
+        let gameController  = GameViewController()
+        gameController.experimentMode = .practice
+        gameController.modalPresentationStyle = .fullScreen
+        self.present(gameController, animated: true, completion: nil)
+    }
+
+    func runExperiment() {
+        let tabbedController = UserSetupController()
+        tabbedController.dataDelegate = dataManager
+        tabbedController.activeUserProfiles = self.dataManager.getActiveUserProfiles()
+        tabbedController.runDelegate = self
+        self.encapsulatingNC = UINavigationController(rootViewController: tabbedController)
+        self.present(self.encapsulatingNC!, animated: true, completion: nil)
+    }
+                                                                      
+    func startExperiment(_ expInfo: [ExperimentParameter: String], isNewUser: Bool) {
+        self.encapsulatingNC?.dismiss(animated: true)
+        let gameController  = GameViewController()
+        gameController.experimentMode = .experiment
+        if isNewUser {
+            gameController.userProfile = self.dataManager.createUserProfile(for: expInfo)
+            gameController.experimentData = ExperimentData(expInfo)
+        } else {
+            print(expInfo)
+            print("1 \(expInfo[.initials]!)")
+            if let userProfile = self.dataManager.getUserProfile(for: expInfo[.initials]!) {
+                print(2)
+                gameController.userProfile = userProfile
+                print(3)
+                gameController.experimentData = dataManager.loadExistingVersion(userProfile)
+                print(4)
+            }
+        }
+        
+        gameController.dataDelegate = self.dataManager
+        gameController.modalPresentationStyle = .fullScreen
+        self.present(gameController, animated: true, completion: nil)
     }
     
 }
@@ -118,4 +127,8 @@ enum ControlItem {
         }
     }
 
+}
+
+protocol ExperimentRunDelegate: AnyObject {
+    func startExperiment(_ expInfo: [ExperimentParameter: String], isNewUser: Bool)
 }

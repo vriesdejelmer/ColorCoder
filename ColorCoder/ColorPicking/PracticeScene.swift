@@ -8,19 +8,12 @@
 
 import SpriteKit
 
-
-protocol CoderViewContainer: AnyObject {
-    func updateTrialCount(to score: Int)
-}
-
 class PracticeScene: GameScene {
-
-    weak var viewDelegate: CoderViewContainer?
 
         //trials
     let numberOfTrials = 1000
     var trialCounter = 0 {
-        didSet { self.viewDelegate?.updateTrialCount(to: trialCounter) }
+        didSet { self.displayDelegate?.updateTrialCount(to: trialCounter) }
     }
         
     override func didMove(to view: SKView) {
