@@ -12,8 +12,7 @@ public class GeneralSettings {
 
     public static let defaults = UserDefaults.standard
 
-    // MARK: - Selection window properties
-
+    public static let progressTrials = 300
 
     public static var backgroundGray: CGFloat {
         get { return CGFloat(defaults.float(forKey: SettingsKey.backgroundGray)) }
