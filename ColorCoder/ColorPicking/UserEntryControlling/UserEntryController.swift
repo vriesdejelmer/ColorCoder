@@ -128,7 +128,7 @@ class TitleCell: UITableViewCell, UITextFieldDelegate {
         self.textField.borderStyle = .roundedRect
         self.textField.isUserInteractionEnabled = true
         self.textField.delegate = self
-        //self.textField.backgroundColor = .lightGray
+        self.textField.autocorrectionType = .no
         self.textField.translatesAutoresizingMaskIntoConstraints = false
         self.textField.addTarget(self, action: #selector(Self.textFieldDidChange(_:)), for: .editingChanged)
         self.contentView.addSubview(textField)

@@ -93,14 +93,9 @@ extension MenuViewController: ExperimentRunDelegate {
             gameController.userProfile = self.dataManager.createUserProfile(for: expInfo)
             gameController.experimentData = ExperimentData(expInfo)
         } else {
-            print(expInfo)
-            print("1 \(expInfo[.initials]!)")
             if let userProfile = self.dataManager.getUserProfile(for: expInfo[.initials]!) {
-                print(2)
                 gameController.userProfile = userProfile
-                print(3)
                 gameController.experimentData = dataManager.loadExistingVersion(userProfile)
-                print(4)
             }
         }
         

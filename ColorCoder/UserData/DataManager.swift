@@ -59,9 +59,7 @@ class DataManager: DataDelegate {
         if let userFolder = self.getUserFolder(for: initials) {
             do {
                 let directoryContents = try FileManager.default.contentsOfDirectory(at: userFolder, includingPropertiesForKeys: [.isRegularFileKey], options: [])
-                print(directoryContents)
                 let profileFiles = directoryContents.filter({ $0.isFileURL && $0.lastPathComponent.starts(with: "userProfile" ) })
-                print(profileFiles)
                 if profileFiles.count == 1 {
                    let data = try Data(contentsOf: profileFiles[0])
                    let decoder = JSONDecoder()

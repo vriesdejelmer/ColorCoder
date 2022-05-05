@@ -27,17 +27,13 @@ class ExperimentScene: GameScene {
         
         super.didMove(to: view)
         
-        print("Still nil \(self.displayDelegate)")
         self.displayDelegate?.showInstructions()
     }
 
     override func setNextTrialParameters() {
         super.setNextTrialParameters()
         
-        print("Do we have trialParam? \(self.experimentData.trialParam)")
-        print(self.trialCounter)
         if self.trialCounter == 0, let trialParam = self.experimentData.trialParam {
-            print("Do we use them?")
             self.nextNodeStep = trialParam.nodeStep
             self.nextTargetStep = trialParam.targetStep
         } else if let trialParam = self.experimentData.getNextTrialParameters() {
