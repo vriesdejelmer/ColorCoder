@@ -53,7 +53,7 @@ class GameViewController: SubCompViewController, ExitDelegate {
 
     func setupGameView() {
         self.gameView   = SKView()
-        
+        UIScreen.main.brightness = CGFloat(0.5)
         if self.experimentMode == .practice {
             self.gameView.layer.cornerRadius    = 5
             self.gameView.layer.borderColor     = UIColor.gray.cgColor
