@@ -16,9 +16,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        
+        UIScreen.main.brightness = CGFloat(0.5)
         let defaults = UserDefaults.standard
-        let defaultValues = [SettingsKey.backgroundGray : 0.5, SettingsKey.eccentricityFactor : 0.5, SettingsKey.sizeFactor: 0.5]
+        let defaultValues = [SettingsKey.backgroundGray : 0.375, SettingsKey.eccentricityFactor : 0.5, SettingsKey.sizeFactor: 0.5]
         defaults.register(defaults: defaultValues)
         
         return true
