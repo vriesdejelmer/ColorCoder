@@ -23,14 +23,15 @@ class GameScene: SKScene, ChoiceDelegate, GameDelegate {
     var setupCompleted   = false
 
         //Sizing
-    let targetDiameter: CGFloat = GeneralSettings.nodeDiameter
-    let controlDiameter: CGFloat = 125
-    let centerDistance: CGFloat = GeneralSettings.nodeEccentricity
+    var stimulusDiameter: CGFloat = GeneralSettings.nodeDiameter
+    let controlDiameter: CGFloat = GeneralSettings.centerRingDiameter
+    var centerDistance: CGFloat = GeneralSettings.nodeEccentricity
+    var lineWidth: CGFloat = GeneralSettings.centerRingWidth
     
         //Node specifics
-    let numberOfNodes = 7
-    let nodeSteps = 5
-    let targetHueSteps = 5
+    let numberOfNodes: Int = GeneralSettings.numberOfNodes
+    var nodeSteps: Int { return GeneralSettings.nodeSteps }
+    var targetHueSteps: Int { return GeneralSettings.targetSteps }
     
     let shuffleTime = 0.15
     
@@ -58,9 +59,8 @@ class GameScene: SKScene, ChoiceDelegate, GameDelegate {
 
     func initializeNodes() {
         
-        self.colorTarget = ColorClickNode.init(ellipseOf: CGSize(width: targetDiameter, height: targetDiameter))
+        self.colorTarget = ColorClickNode.init(ellipseOf: CGSize(width: stimulusDiameter, height: stimulusDiameter))
         if let colorTarget = self.colorTarget as? ColorClickNode {
-            colorTarget.lineWidth = 10
             colorTarget.isUserInteractionEnabled = false
         }
         
@@ -80,7 +80,7 @@ class GameScene: SKScene, ChoiceDelegate, GameDelegate {
             centerNode.gameDelegate = self
             centerNode.isUserInteractionEnabled = true
             centerNode.strokeColor = self.centerColor
-            centerNode.lineWidth = 25
+            centerNode.lineWidth = lineWidth
             self.addChild(centerNode)
             self.centerControlNode()
         }
@@ -138,7 +138,7 @@ class GameScene: SKScene, ChoiceDelegate, GameDelegate {
             let node = colorChoices[nodeIndex]
             node.hue = CGFloat(nodeIndex*self.nodeSteps + self.nextNodeStep)/CGFloat(self.numberOfNodes*self.nodeSteps)
             
-            let rad = -((CGFloat(index)/CGFloat(self.numberOfNodes-1)+rotationOffset) * (CGFloat.pi*1.1)) - CGFloat.pi*0.95
+            let rad = -((CGFloat(index)/CGFloat(self.numberOfNodes-1)+rotationOffset) * CGFloat.pi) - CGFloat.pi
             let x = self.getMidPoint().x + cos(rad) * self.centerDistance
             let y = self.getMidPoint().y + sin(rad) * self.centerDistance
             let nodePosition = CGPoint(x: x, y: y)

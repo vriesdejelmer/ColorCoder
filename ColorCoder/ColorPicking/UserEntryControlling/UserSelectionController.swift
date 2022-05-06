@@ -56,7 +56,7 @@ class UserSelectionController: UIViewController, ChoiceDelegate {
     
     private func setupSelectionButton() {
         self.userSelButton = UIButton()
-        self.userSelButton.layer.borderColor = UIColor.systemBlue.cgColor
+        self.userSelButton.layer.borderColor = UIColor.systemGreen.cgColor
         self.userSelButton.layer.borderWidth = 4
         self.userSelButton.layer.cornerRadius = 10
         self.userSelButton.setTitle("Select User", for: .normal)
@@ -93,16 +93,16 @@ class UserSelectionController: UIViewController, ChoiceDelegate {
         placementConstraints.append(NSLayoutConstraint(item: self.view!, attribute: .centerX, relatedBy: .equal, toItem: self.userSelButton, attribute: .centerX, multiplier: 1, constant: 0))
         placementConstraints.append(NSLayoutConstraint(item: self.view!, attribute: .centerY, relatedBy: .equal, toItem: self.userSelButton, attribute: .centerY, multiplier: 1, constant: 0))
         
-        NSLayoutConstraint.activate([
-            self.userSelButton.heightAnchor.constraint(equalToConstant: 60),
-            self.userSelButton.widthAnchor.constraint(equalToConstant: 150)])
+        let buttonConstraints = [ self.userSelButton.heightAnchor.constraint(equalToConstant: 60),
+                                  self.userSelButton.widthAnchor.constraint(equalToConstant: 150)]
         
+        self.userSelButton.addConstraints(buttonConstraints)
         self.view.addConstraints(placementConstraints)
     }
     
     func selected(_ selectedIndex: Int) {
         self.selectedUser = users[selectedIndex]
-        self.userSelLabel.textColor = .systemBlue
+        self.userSelLabel.textColor = .systemGreen
         
         self.selectionController?.dismiss(animated: true)
         self.selectionController = nil
@@ -111,35 +111,3 @@ class UserSelectionController: UIViewController, ChoiceDelegate {
     
 }
 
-
-class SelectionViewController: UITableViewController {
-    
-    var users: [String]!
-    weak var choiceDelegate: ChoiceDelegate?
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
-        self.tableView.tableFooterView = UIView(frame: .zero)
-    }
-    
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-    
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return users.count
-    }
-    
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if let reusableCell = self.tableView.dequeueReusableCell(withIdentifier: "Cell") {
-            reusableCell.textLabel?.text = self.users[indexPath.row]
-            return reusableCell
-        }
-        return UITableViewCell()
-    }
-    
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        choiceDelegate?.selected(indexPath.row)
-    }
-}

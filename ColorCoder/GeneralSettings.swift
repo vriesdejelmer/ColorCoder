@@ -13,7 +13,12 @@ public class GeneralSettings {
     public static let defaults = UserDefaults.standard
 
     public static let progressTrials = 300
-
+    public static let centerRingDiameter: CGFloat = 125
+    public static let numberOfNodes = 7
+    public static let centerRingWidth: CGFloat = 25
+    public static let targetSteps = 35
+    public static let nodeSteps = 35
+    
     public static var backgroundGray: CGFloat {
         get { return CGFloat(defaults.float(forKey: SettingsKey.backgroundGray)) }
         set { defaults.set(Float(newValue), forKey: SettingsKey.backgroundGray) }

@@ -10,7 +10,7 @@ import UIKit
 
 class MenuViewController: BaseViewController {
 
-    let buttonList: [ControlItem] = [.practice, .play, .settings, .about]
+    let buttonList: [ControlItem] = [.practice, .play, .userProfiles, .settings]
     var dataManager: DataManager!
     var encapsulatingNC: UINavigationController?
 
@@ -50,8 +50,8 @@ class MenuViewController: BaseViewController {
         switch sender.controlItem! {
         case .practice: self.pushGameController()
         case .play: self.runExperiment()
+        case .userProfiles: self.pushUPController()
         case .settings: self.pushSettingsController()
-        case .about: self.pushAboutController()
         }
     }
     
@@ -60,9 +60,11 @@ class MenuViewController: BaseViewController {
         self.present(settingsController, animated: true, completion: nil)
     }
 
-    func pushAboutController() {
-        let aboutController     = AboutViewController()
-        self.present(aboutController, animated: true, completion: nil)
+    func pushUPController() {
+        let upController     = UserProfileController()
+        upController.dataDelegate = self.dataManager
+        let navController = UINavigationController(rootViewController: upController)
+        self.present(navController, animated: true, completion: nil)
     }
 }
 
@@ -77,28 +79,20 @@ extension MenuViewController: ExperimentRunDelegate {
     }
 
     func runExperiment() {
-        let tabbedController = UserSetupController()
-        tabbedController.dataDelegate = dataManager
-        tabbedController.activeUserProfiles = self.dataManager.getActiveUserProfiles()
-        tabbedController.runDelegate = self
-        self.encapsulatingNC = UINavigationController(rootViewController: tabbedController)
+        let userEntryController = ExperimentEntryController()
+        userEntryController.users = self.dataManager.getActiveUserProfiles()
+        userEntryController.dataDelegate = dataManager
+        userEntryController.runDelegate = self
+        self.encapsulatingNC = UINavigationController(rootViewController: userEntryController)
         self.present(self.encapsulatingNC!, animated: true, completion: nil)
     }
                                                                       
-    func startExperiment(_ expInfo: [ExperimentParameter: String], isNewUser: Bool) {
+    func startExperiment(_ expData: ExperimentData) {
+        
         self.encapsulatingNC?.dismiss(animated: true)
         let gameController  = GameViewController()
         gameController.experimentMode = .experiment
-        if isNewUser {
-            gameController.userProfile = self.dataManager.createUserProfile(for: expInfo)
-            gameController.experimentData = ExperimentData(expInfo)
-        } else {
-            if let userProfile = self.dataManager.getUserProfile(for: expInfo[.initials]!) {
-                gameController.userProfile = userProfile
-                gameController.experimentData = dataManager.loadExistingVersion(userProfile)
-            }
-        }
-        
+        gameController.experimentData = expData
         gameController.dataDelegate = self.dataManager
         gameController.modalPresentationStyle = .fullScreen
         self.present(gameController, animated: true, completion: nil)
@@ -111,19 +105,19 @@ class ControlButton: UIButton {
 }
 
 enum ControlItem {
-    case practice, play, settings, about
+    case practice, play, settings, userProfiles
 
     var displayName: String {
         switch self {
         case .practice: return "Practice"
         case .play: return "Play"
         case .settings: return "Settings"
-        case .about: return "About"
+        case .userProfiles: return "User Profiles"
         }
     }
 
 }
 
 protocol ExperimentRunDelegate: AnyObject {
-    func startExperiment(_ expInfo: [ExperimentParameter: String], isNewUser: Bool)
+    func startExperiment(_ expData: ExperimentData)
 }

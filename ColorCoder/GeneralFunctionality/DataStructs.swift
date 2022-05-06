@@ -26,7 +26,7 @@ enum SettingsItem: String {
 
 enum ExperimentParameter: String, Codable {
     
-    case age, initials, sex, targetSteps, nodeSteps, backgroundShade, nodeDiameter, nodeEccentricity
+    case age, initials, sex, targetSteps, nodeSteps, backgroundShade, nodeDiameter, nodeEccentricity, version
 
     var displayName: String {
         switch self {
@@ -38,6 +38,7 @@ enum ExperimentParameter: String, Codable {
         case .nodeEccentricity: return "Node Eccentricity"
         case .nodeDiameter: return "Node Diameter"
         case .backgroundShade: return "Background Grey Level"
+        case .version: return "Version"
         }
     }
     
@@ -51,6 +52,7 @@ enum ExperimentParameter: String, Codable {
         case .nodeEccentricity: return "(experimenter only)"
         case .nodeDiameter: return "(experimenter only)"
         case .backgroundShade: return "(experimenter only)"
+        case .version: return "(shouldn't be set manually)"
         }
     }
     
@@ -60,8 +62,8 @@ enum ExperimentParameter: String, Codable {
     
     func getDefault() -> String {
         switch self {
-        case .targetSteps: return "35"
-        case .nodeSteps: return "35"
+        case .targetSteps: return "\(GeneralSettings.targetSteps)"
+        case .nodeSteps: return "\(GeneralSettings.nodeSteps)"
         case .backgroundShade: return "\(GeneralSettings.backgroundGray)"
         case .nodeDiameter: return "\(GeneralSettings.nodeDiameter)"
         case .nodeEccentricity: return "\(GeneralSettings.nodeEccentricity)"

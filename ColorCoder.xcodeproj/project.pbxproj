@@ -7,12 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3D09A33928240EA500DCB91A /* UserProfileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D09A33828240EA500DCB91A /* UserProfileController.swift */; };
 		3D42F4F8233FC23700129757 /* UIKitExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D42F4F7233FC23700129757 /* UIKitExtensions.swift */; };
 		3D42F4FA233FC25A00129757 /* DataStructs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D42F4F9233FC25A00129757 /* DataStructs.swift */; };
 		3D42F4FC233FC2B200129757 /* UIKitConstraintFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D42F4FB233FC2B200129757 /* UIKitConstraintFunctions.swift */; };
 		3D42F502233FEFFE00129757 /* GeometricFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D42F501233FEFFE00129757 /* GeometricFunctions.swift */; };
 		3D42F5052340047B00129757 /* LLPIXEL3.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3D42F504233FFE7800129757 /* LLPIXEL3.ttf */; };
-		3D430E0E2815C86100D541E6 /* UserEntryController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D430E0D2815C86100D541E6 /* UserEntryController.swift */; };
+		3D430E0E2815C86100D541E6 /* ExperimentEntryController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D430E0D2815C86100D541E6 /* ExperimentEntryController.swift */; };
 		3D430E12281607E100D541E6 /* ExperimentScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D430E11281607E100D541E6 /* ExperimentScene.swift */; };
 		3D430E142816082300D541E6 /* GameNodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D430E132816082300D541E6 /* GameNodes.swift */; };
 		3D430E16281608C700D541E6 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D430E15281608C700D541E6 /* GameScene.swift */; };
@@ -35,12 +36,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3D09A33828240EA500DCB91A /* UserProfileController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileController.swift; sourceTree = "<group>"; };
 		3D42F4F7233FC23700129757 /* UIKitExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIKitExtensions.swift; sourceTree = "<group>"; };
 		3D42F4F9233FC25A00129757 /* DataStructs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStructs.swift; sourceTree = "<group>"; };
 		3D42F4FB233FC2B200129757 /* UIKitConstraintFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIKitConstraintFunctions.swift; sourceTree = "<group>"; };
 		3D42F501233FEFFE00129757 /* GeometricFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeometricFunctions.swift; sourceTree = "<group>"; };
 		3D42F504233FFE7800129757 /* LLPIXEL3.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = LLPIXEL3.ttf; sourceTree = "<group>"; };
-		3D430E0D2815C86100D541E6 /* UserEntryController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserEntryController.swift; sourceTree = "<group>"; };
+		3D430E0D2815C86100D541E6 /* ExperimentEntryController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExperimentEntryController.swift; sourceTree = "<group>"; };
 		3D430E11281607E100D541E6 /* ExperimentScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExperimentScene.swift; sourceTree = "<group>"; };
 		3D430E132816082300D541E6 /* GameNodes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameNodes.swift; sourceTree = "<group>"; };
 		3D430E15281608C700D541E6 /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
@@ -112,8 +114,9 @@
 			isa = PBXGroup;
 			children = (
 				3DF3532F281D7B8800983C0B /* UserSelectionController.swift */,
-				3D430E0D2815C86100D541E6 /* UserEntryController.swift */,
+				3D430E0D2815C86100D541E6 /* ExperimentEntryController.swift */,
 				3D79B49528219328006B5F66 /* UserSetupController.swift */,
+				3D09A33828240EA500DCB91A /* UserProfileController.swift */,
 			);
 			path = UserEntryControlling;
 			sourceTree = "<group>";
@@ -252,9 +255,10 @@
 				3D430E12281607E100D541E6 /* ExperimentScene.swift in Sources */,
 				3DDC503F233CCB9B0065CBAE /* ExitButton.swift in Sources */,
 				3DDC503B233CA1BC0065CBAE /* SettingsViewController.swift in Sources */,
+				3D09A33928240EA500DCB91A /* UserProfileController.swift in Sources */,
 				3D430E16281608C700D541E6 /* GameScene.swift in Sources */,
 				3DDC502A233BEF430065CBAE /* MenuViewController.swift in Sources */,
-				3D430E0E2815C86100D541E6 /* UserEntryController.swift in Sources */,
+				3D430E0E2815C86100D541E6 /* ExperimentEntryController.swift in Sources */,
 				3DDC5028233BEF430065CBAE /* AppDelegate.swift in Sources */,
 				3DDC503D233CA2580065CBAE /* GeneralSettings.swift in Sources */,
 			);
@@ -334,7 +338,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -390,7 +394,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;

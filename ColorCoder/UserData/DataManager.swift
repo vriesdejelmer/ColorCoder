@@ -39,6 +39,30 @@ class DataManager: DataDelegate {
         return nil
     }
     
+    func nextVersion(for userInitials: String) -> Int {
+        
+        var nextVersion = 0
+        
+        if let userFolder = self.getUserFolder(for: userInitials) {
+            do{
+                let directoryContents = try FileManager.default.contentsOfDirectory(at: userFolder, includingPropertiesForKeys: [.isRegularFileKey], options: [])
+                let versionFiles = directoryContents.filter({ $0.isFileURL && $0.lastPathComponent.starts(with: userInitials ) })
+                for file in versionFiles {
+                    let data = try Data(contentsOf: file)
+                    let decoder = JSONDecoder()
+                    let experimentData = try decoder.decode(ExperimentData.self, from: data)
+                    if experimentData.version >= nextVersion {
+                        nextVersion = experimentData.version + 1
+                    }
+                }
+            } catch {
+                print("Whooops")
+            }
+         }
+         return nextVersion
+        
+    }
+    
     func isExistingUser(_ initials: String) -> Bool {
         if let userFolder = self.getUserFolder(for: initials) {
             do {
@@ -52,6 +76,27 @@ class DataManager: DataDelegate {
            }
        }
        return false
+    }
+    
+    func hasUnfinishedVersions(for userInitials: String) -> ExperimentData? {
+           
+       if let userFolder = self.getUserFolder(for: userInitials) {
+           do{
+               let directoryContents = try FileManager.default.contentsOfDirectory(at: userFolder, includingPropertiesForKeys: [.isRegularFileKey], options: [])
+               let versionFiles = directoryContents.filter({ $0.isFileURL && $0.lastPathComponent.starts(with: userInitials ) })
+               for file in versionFiles {
+                   let data = try Data(contentsOf: file)
+                   let decoder = JSONDecoder()
+                   let experimentData = try decoder.decode(ExperimentData.self, from: data)
+                   if experimentData.hasTrialsLeft {
+                       return experimentData
+                   }
+               }
+           } catch {
+               print("Whooops")
+           }
+        }
+        return nil
     }
     
     func getUserProfile(for initials: String) -> UserProfile? {
@@ -128,6 +173,6 @@ class DataManager: DataDelegate {
                 print("Whooops")
             }
         }
-        return ExperimentData(userProfile, version: version, targetSteps: 35, nodeSteps: 35)
+        return nil
     }    
 }

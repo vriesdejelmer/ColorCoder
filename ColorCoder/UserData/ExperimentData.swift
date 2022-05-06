@@ -10,11 +10,11 @@ import UIKit
 
 class ExperimentData: Codable {
     
-    private var targetSteps: Int
-    private var nodeSteps: Int
-    private var backgroundShade: CGFloat
-    private var centerDistance: CGFloat
-    private var stimulusDiameter: CGFloat
+    var targetSteps: Int
+    var nodeSteps: Int
+    var backgroundShade: CGFloat
+    var centerDistance: CGFloat
+    var stimulusDiameter: CGFloat
     
     private var elementLocations = [CGPoint]()
     private var trialNumbers = [Int]()
@@ -22,6 +22,7 @@ class ExperimentData: Codable {
     private var targetOffsets = [Int]()
     private var trialResponses = [Int]()
     private var trialTimes = [Double]()
+    private var leftIndices = [Int]()
     
     private var comboArray = [TrialParam]()
     
@@ -36,7 +37,11 @@ class ExperimentData: Codable {
     }
     
     init(_ expInfo: [ExperimentParameter: String]) {
-        self.version = 1
+        if let version = expInfo[.version] {
+            self.version = Int(version)!
+        } else {
+            self.version = 0
+        }
         self.initials = expInfo[.initials]!
         self.targetSteps = Int(expInfo[.targetSteps]!)!
         self.nodeSteps = Int(expInfo[.nodeSteps]!)!
@@ -82,13 +87,15 @@ class ExperimentData: Codable {
         }
     }
     
-    func addTrial(number: Int, targetOffset: Int, nodeOffset: Int, trialTime: Double, response: Int) {
+    func addTrial(number: Int, targetOffset: Int, nodeOffset: Int, trialTime: Double, response: Int, leftIndex: Int) {
+        
         if (trialNumbers.count == nodeOffsets.count && trialNumbers.count == trialResponses.count && trialNumbers.count == targetOffsets.count) {
             self.trialNumbers.append(number)
             self.targetOffsets.append(targetOffset)
             self.trialResponses.append(response)
             self.nodeOffsets.append(nodeOffset)
             self.trialTimes.append(trialTime)
+            self.leftIndices.append(leftIndex)
         } else {
             fatalError("Crucial Data Collection Error")
         }

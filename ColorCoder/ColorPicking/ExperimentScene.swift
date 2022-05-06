@@ -16,7 +16,24 @@ class ExperimentScene: GameScene {
     var trialCounter = 0
     var trialResponses: [Int]!
     
-    var experimentData: ExperimentData!
+    override var nodeSteps: Int {
+        return experimentData.nodeSteps
+    }
+    override var targetHueSteps: Int {
+        return experimentData.targetSteps
+    }
+    
+    
+    var experimentData: ExperimentData! {
+        didSet {
+            self.stimulusDiameter = experimentData.stimulusDiameter
+            self.centerDistance = experimentData.centerDistance
+        }
+    }
+    
+    override var centerColor: UIColor {
+        return UIColor(white: (experimentData.backgroundShade + 0.5).remainder(dividingBy: 1.0), alpha: 1.0)
+    }
     
         // timing
     var trialTime: TimeInterval?
@@ -50,7 +67,7 @@ class ExperimentScene: GameScene {
             self.trialTime = CFAbsoluteTimeGetCurrent() - startTime
         }
         
-        self.experimentData.addTrial(number: trialCounter, targetOffset: self.nextTargetStep, nodeOffset: self.nextNodeStep, trialTime: self.trialTime!, response: selectedIndex)
+        self.experimentData.addTrial(number: trialCounter, targetOffset: self.nextTargetStep, nodeOffset: self.nextNodeStep, trialTime: self.trialTime!, response: selectedIndex, leftIndex: self.startIndex)
 
         if self.experimentData.hasTrialsLeft {
             if (self.trialCounter+1) % GeneralSettings.progressTrials == 0 {
@@ -95,6 +112,9 @@ class ExperimentScene: GameScene {
 protocol DataDelegate: AnyObject {
     func saveProgress(_ experimentData: ExperimentData)
     func isExistingUser(_ initials: String) -> Bool
+    func createUserProfile(for expInfo: [ExperimentParameter: String]) -> UserProfile?
+    func hasUnfinishedVersions(for userInitials: String) -> ExperimentData?
+    func nextVersion(for userInitials: String) -> Int
 }
 
 
