@@ -29,7 +29,7 @@
 		3DDC503D233CA2580065CBAE /* GeneralSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DDC503C233CA2580065CBAE /* GeneralSettings.swift */; };
 		3DDC503F233CCB9B0065CBAE /* ExitButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DDC503E233CCB9B0065CBAE /* ExitButton.swift */; };
 		3DDC5041233CCF650065CBAE /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DDC5040233CCF650065CBAE /* AboutViewController.swift */; };
-		3DDC5043233CE34B0065CBAE /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DDC5042233CE34B0065CBAE /* GameViewController.swift */; };
+		3DDC5043233CE34B0065CBAE /* ExperimentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DDC5042233CE34B0065CBAE /* ExperimentViewController.swift */; };
 		3DDC5045233CE3980065CBAE /* PracticeScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DDC5044233CE3980065CBAE /* PracticeScene.swift */; };
 		3DF35330281D7B8800983C0B /* UserSelectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DF3532F281D7B8800983C0B /* UserSelectionController.swift */; };
 /* End PBXBuildFile section */
@@ -59,7 +59,7 @@
 		3DDC503C233CA2580065CBAE /* GeneralSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralSettings.swift; sourceTree = "<group>"; };
 		3DDC503E233CCB9B0065CBAE /* ExitButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExitButton.swift; sourceTree = "<group>"; };
 		3DDC5040233CCF650065CBAE /* AboutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
-		3DDC5042233CE34B0065CBAE /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
+		3DDC5042233CE34B0065CBAE /* ExperimentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExperimentViewController.swift; sourceTree = "<group>"; };
 		3DDC5044233CE3980065CBAE /* PracticeScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PracticeScene.swift; sourceTree = "<group>"; };
 		3DF3532F281D7B8800983C0B /* UserSelectionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSelectionController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -166,7 +166,7 @@
 			children = (
 				3DA0270F28257C4A00EF2097 /* Scenes */,
 				3D79B49428219300006B5F66 /* UserEntryControlling */,
-				3DDC5042233CE34B0065CBAE /* GameViewController.swift */,
+				3DDC5042233CE34B0065CBAE /* ExperimentViewController.swift */,
 				3D430E132816082300D541E6 /* GameNodes.swift */,
 			);
 			path = ColorPicking;
@@ -244,7 +244,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3DDC5043233CE34B0065CBAE /* GameViewController.swift in Sources */,
+				3DDC5043233CE34B0065CBAE /* ExperimentViewController.swift in Sources */,
 				3D79B48E282176ED006B5F66 /* DataManager.swift in Sources */,
 				3D79B491282192D2006B5F66 /* UserProfile.swift in Sources */,
 				3DDC5041233CCF650065CBAE /* AboutViewController.swift in Sources */,

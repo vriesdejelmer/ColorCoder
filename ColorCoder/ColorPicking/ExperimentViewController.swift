@@ -13,7 +13,7 @@ public enum ExperimentMode {
     case practice, experiment
 }
 
-class GameViewController: SubCompViewController, ExitDelegate {
+class ExperimentViewController: SubCompViewController, ExitDelegate {
 
     var gameView: SKView!
     var colorScore: UILabel!
@@ -40,7 +40,8 @@ class GameViewController: SubCompViewController, ExitDelegate {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        self.displayWarningIfNeeded()
+        self.showInstructions()
+        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -142,14 +143,19 @@ class GameViewController: SubCompViewController, ExitDelegate {
     
 }
 
-extension GameViewController: DisplayDelegate {
+extension ExperimentViewController: DisplayDelegate {
 
     func updateTrialCount(to score: Int) {
         self.colorScore.text = trialPrefix + String(score)
     }
 
     func showInstructions() {
-        self.showAlert(with: "Instructions, Please Read", message: "Welcome to the experiment! Each trial starts upon placing the finger in the center ring, which will change in color. Upon this color change, please select, from the surroundings disks, the disk that is most similar (?) in color. While it is not important to be as fast as possible, please do not overthink and try to respond promptly.", buttonText: "OK", isDismissing: false)
+        let instructionAlert = UIAlertController(title: "Instructions, Please Read", message: "Welcome to the experiment! Each trial starts upon placing the finger in the center ring, which will change in color. Upon this color change, please select, from the surroundings disks, the disk that is most similar (?) in color. While it is not important to be as fast as possible, please do not overthink and try to respond promptly.", preferredStyle: .alert)
+        
+        instructionAlert.addAction(UIAlertAction(title: "Let's Do It", style: .default) {_ in
+            self.displayWarningIfNeeded()
+        })
+        self.present(instructionAlert, animated: true)
     }
     
     func displayProgress(trialNumber: Int, trialsLeft: Int) {

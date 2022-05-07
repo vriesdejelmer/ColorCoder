@@ -72,7 +72,7 @@ extension MenuViewController: ExperimentRunDelegate {
     
     
     func pushGameController() {
-        let gameController  = GameViewController()
+        let gameController  = ExperimentViewController()
         gameController.experimentMode = .practice
         gameController.modalPresentationStyle = .fullScreen
         self.present(gameController, animated: true, completion: nil)
@@ -90,7 +90,7 @@ extension MenuViewController: ExperimentRunDelegate {
     func startExperiment(_ expData: ExperimentData) {
         
         self.encapsulatingNC?.dismiss(animated: true)
-        let gameController  = GameViewController()
+        let gameController  = ExperimentViewController()
         gameController.experimentMode = .experiment
         gameController.experimentData = expData
         gameController.dataDelegate = self.dataManager

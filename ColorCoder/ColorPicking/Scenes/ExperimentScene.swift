@@ -43,10 +43,8 @@ class ExperimentScene: GameScene {
         view.showsPhysics   = false
         
         super.didMove(to: view)
-        
-        self.displayDelegate?.showInstructions()
     }
-
+    
     override func setNextTrialParameters() {
         super.setNextTrialParameters()
         
