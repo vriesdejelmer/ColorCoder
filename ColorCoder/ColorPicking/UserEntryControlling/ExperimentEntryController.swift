@@ -13,8 +13,7 @@ class ExperimentEntryController: UIViewController, UserInfoDelegate, UITableView
     var rightButton: UIBarButtonItem!
     var tableView: UITableView!
     let userItems: [ExperimentParameter] = [.targetSteps, .nodeSteps, .nodeDiameter, .nodeEccentricity, .backgroundShade]
-    var expInfo: [ExperimentParameter: String] = [.targetSteps: "35", .nodeSteps: "35", .nodeDiameter: "\(GeneralSettings.nodeDiameter)", .nodeEccentricity: "\(GeneralSettings.nodeEccentricity)", .backgroundShade: "\(GeneralSettings.backgroundGray)"]
-    let cellIdentifier = "TitleCell"
+    var expInfo: [ExperimentParameter: String] = [.targetSteps: "\(GeneralSettings.DefaultParams.targetSteps)", .nodeSteps: "\(GeneralSettings.DefaultParams.nodeSteps)", .nodeDiameter: "\(GeneralSettings.nodeDiameter)", .nodeEccentricity: "\(GeneralSettings.nodeEccentricity)", .backgroundShade: "\(GeneralSettings.backgroundGray)"]
     var expData: ExperimentData?
 
     
@@ -75,7 +74,7 @@ class ExperimentEntryController: UIViewController, UserInfoDelegate, UITableView
         self.view.backgroundColor = .white
         self.title = "Start Experiment"
         
-        self.rightButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(ExperimentEntryController.finished(_:)))
+        self.rightButton = UIBarButtonItem(barButtonSystemItem: .play, target: self, action: #selector(ExperimentEntryController.finished(_:)))
         self.rightButton.isEnabled = false
         self.navigationItem.setRightBarButton(rightButton, animated: false)
     }
@@ -103,7 +102,7 @@ class ExperimentEntryController: UIViewController, UserInfoDelegate, UITableView
     func setupTableView() {
         self.tableView = UITableView()
         
-        self.tableView.register(TitleCell.self, forCellReuseIdentifier: self.cellIdentifier)
+        self.tableView.register(TitleCell.self, forCellReuseIdentifier: GeneralSettings.Constants.TitleCell)
         self.tableView.tableFooterView  = UIView()
         self.tableView.translatesAutoresizingMaskIntoConstraints = false
         self.tableView.dataSource = self
@@ -162,7 +161,7 @@ class ExperimentEntryController: UIViewController, UserInfoDelegate, UITableView
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if let selectedCell = self.tableView.dequeueReusableCell(withIdentifier: self.cellIdentifier, for: indexPath) as? TitleCell {
+        if let selectedCell = self.tableView.dequeueReusableCell(withIdentifier: GeneralSettings.Constants.TitleCell, for: indexPath) as? TitleCell {
             selectedCell.userInfDelegate = self
             selectedCell.userItem = userItems[indexPath.row]
             selectedCell.isUserInteractionEnabled = self.cellsEnabled
@@ -266,7 +265,7 @@ class TitleCell: UITableViewCell, UITextFieldDelegate {
     }
     
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        fatalError(GeneralSettings.Constants.CoderNotInitialzed)
     }
     
     override func layoutSubviews() {

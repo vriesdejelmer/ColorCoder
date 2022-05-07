@@ -85,6 +85,16 @@ extension CGRect {
 }
 
 
+extension UIViewController {
+    func showAlert(with title: String, message: String, buttonText: String, isDismissing: Bool) {
+        let generalAlert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        generalAlert.addAction(UIAlertAction(title: buttonText, style: .default) {_ in
+            if isDismissing { self.dismiss(animated: true) }
+        })
+        self.present(generalAlert, animated: true)
+    }
+}
+
 extension Array {
   init(repeating: [Element], count: Int) {
     self.init([[Element]](repeating: repeating, count: count).flatMap{$0})

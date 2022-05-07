@@ -24,14 +24,14 @@ class GameScene: SKScene, ChoiceDelegate, GameDelegate {
 
         //Sizing
     var stimulusDiameter: CGFloat = GeneralSettings.nodeDiameter
-    let controlDiameter: CGFloat = GeneralSettings.centerRingDiameter
+    let controlDiameter: CGFloat = GeneralSettings.DefaultParams.centerRingDiameter
     var centerDistance: CGFloat = GeneralSettings.nodeEccentricity
-    var lineWidth: CGFloat = GeneralSettings.centerRingWidth
+    var lineWidth: CGFloat = GeneralSettings.DefaultParams.centerRingWidth
     
         //Node specifics
-    let numberOfNodes: Int = GeneralSettings.numberOfNodes
-    var nodeSteps: Int { return GeneralSettings.nodeSteps }
-    var targetHueSteps: Int { return GeneralSettings.targetSteps }
+    let numberOfNodes: Int = GeneralSettings.DefaultParams.numberOfNodes
+    var nodeSteps: Int { return GeneralSettings.DefaultParams.nodeSteps }
+    var targetHueSteps: Int { return GeneralSettings.DefaultParams.targetSteps }
     
     let shuffleTime = 0.15
     

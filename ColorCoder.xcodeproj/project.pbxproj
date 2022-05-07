@@ -20,7 +20,6 @@
 		3D79B48E282176ED006B5F66 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D79B48D282176EC006B5F66 /* DataManager.swift */; };
 		3D79B491282192D2006B5F66 /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D79B490282192D2006B5F66 /* UserProfile.swift */; };
 		3D79B493282192E3006B5F66 /* ExperimentData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D79B492282192E3006B5F66 /* ExperimentData.swift */; };
-		3D79B49628219328006B5F66 /* UserSetupController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D79B49528219328006B5F66 /* UserSetupController.swift */; };
 		3DDC5028233BEF430065CBAE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DDC5027233BEF430065CBAE /* AppDelegate.swift */; };
 		3DDC502A233BEF430065CBAE /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DDC5029233BEF430065CBAE /* MenuViewController.swift */; };
 		3DDC502D233BEF430065CBAE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3DDC502B233BEF430065CBAE /* Main.storyboard */; };
@@ -49,7 +48,6 @@
 		3D79B48D282176EC006B5F66 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 		3D79B490282192D2006B5F66 /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
 		3D79B492282192E3006B5F66 /* ExperimentData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExperimentData.swift; sourceTree = "<group>"; };
-		3D79B49528219328006B5F66 /* UserSetupController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSetupController.swift; sourceTree = "<group>"; };
 		3DDC5024233BEF430065CBAE /* ColorCoder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ColorCoder.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3DDC5027233BEF430065CBAE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3DDC5029233BEF430065CBAE /* MenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
@@ -115,10 +113,19 @@
 			children = (
 				3DF3532F281D7B8800983C0B /* UserSelectionController.swift */,
 				3D430E0D2815C86100D541E6 /* ExperimentEntryController.swift */,
-				3D79B49528219328006B5F66 /* UserSetupController.swift */,
 				3D09A33828240EA500DCB91A /* UserProfileController.swift */,
 			);
 			path = UserEntryControlling;
+			sourceTree = "<group>";
+		};
+		3DA0270F28257C4A00EF2097 /* Scenes */ = {
+			isa = PBXGroup;
+			children = (
+				3D430E11281607E100D541E6 /* ExperimentScene.swift */,
+				3D430E15281608C700D541E6 /* GameScene.swift */,
+				3DDC5044233CE3980065CBAE /* PracticeScene.swift */,
+			);
+			path = Scenes;
 			sourceTree = "<group>";
 		};
 		3DDC501B233BEF430065CBAE = {
@@ -157,12 +164,10 @@
 		3DDC5039233BF4A40065CBAE /* ColorPicking */ = {
 			isa = PBXGroup;
 			children = (
+				3DA0270F28257C4A00EF2097 /* Scenes */,
 				3D79B49428219300006B5F66 /* UserEntryControlling */,
 				3DDC5042233CE34B0065CBAE /* GameViewController.swift */,
-				3DDC5044233CE3980065CBAE /* PracticeScene.swift */,
-				3D430E11281607E100D541E6 /* ExperimentScene.swift */,
 				3D430E132816082300D541E6 /* GameNodes.swift */,
-				3D430E15281608C700D541E6 /* GameScene.swift */,
 			);
 			path = ColorPicking;
 			sourceTree = "<group>";
@@ -247,7 +252,6 @@
 				3D430E142816082300D541E6 /* GameNodes.swift in Sources */,
 				3D42F4FA233FC25A00129757 /* DataStructs.swift in Sources */,
 				3D42F4FC233FC2B200129757 /* UIKitConstraintFunctions.swift in Sources */,
-				3D79B49628219328006B5F66 /* UserSetupController.swift in Sources */,
 				3D42F502233FEFFE00129757 /* GeometricFunctions.swift in Sources */,
 				3D79B493282192E3006B5F66 /* ExperimentData.swift in Sources */,
 				3D42F4F8233FC23700129757 /* UIKitExtensions.swift in Sources */,

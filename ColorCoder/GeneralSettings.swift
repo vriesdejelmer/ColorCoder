@@ -12,12 +12,19 @@ public class GeneralSettings {
 
     public static let defaults = UserDefaults.standard
 
-    public static let progressTrials = 300
-    public static let centerRingDiameter: CGFloat = 110
-    public static let numberOfNodes = 7
-    public static let centerRingWidth: CGFloat = 25
-    public static let targetSteps = 35
-    public static let nodeSteps = 35
+    public struct DefaultParams {
+        public static let progressTrials = 300
+        public static let centerRingDiameter: CGFloat = 110
+        public static let numberOfNodes = 7
+        public static let centerRingWidth: CGFloat = 25
+        public static let targetSteps = 35
+        public static let nodeSteps = 35
+    }
+    
+    public struct Constants {
+        public static let TitleCell: String = "TitleCell"
+        public static let CoderNotInitialzed: String = "init(coder:) has not been implemented"
+    }
     
     public static var backgroundGray: CGFloat {
         get { return CGFloat(defaults.float(forKey: SettingsKey.backgroundGray)) }
@@ -52,7 +59,7 @@ public class GeneralSettings {
     }
     
     public static let aboutText: String = "Unfortunately for those looking for a psychadelic version of Pong this app was created for the purpose of measuring eye movements and studying the possiblity of communicating eye movement behavior from one player to another."
-
+    
 }
 
 

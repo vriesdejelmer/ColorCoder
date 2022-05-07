@@ -62,8 +62,8 @@ enum ExperimentParameter: String, Codable {
     
     func getDefault() -> String {
         switch self {
-        case .targetSteps: return "\(GeneralSettings.targetSteps)"
-        case .nodeSteps: return "\(GeneralSettings.nodeSteps)"
+        case .targetSteps: return "\(GeneralSettings.DefaultParams.targetSteps)"
+        case .nodeSteps: return "\(GeneralSettings.DefaultParams.nodeSteps)"
         case .backgroundShade: return "\(GeneralSettings.backgroundGray)"
         case .nodeDiameter: return "\(GeneralSettings.nodeDiameter)"
         case .nodeEccentricity: return "\(GeneralSettings.nodeEccentricity)"

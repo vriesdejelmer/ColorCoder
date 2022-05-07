@@ -17,7 +17,7 @@ class DataManager: DataDelegate {
                 let userList = directoryContents.filter({ $0.hasDirectoryPath }).map({ $0.lastPathComponent })
                 return userList
             } catch {
-                print("Hmmmm ships")
+                print("Problem fetching document folder files")
             }
         }
         return [String]()
@@ -32,6 +32,7 @@ class DataManager: DataDelegate {
             do {
                 try json!.write(to: filePath)
             } catch {
+                print("Problem writing user file")
                 return nil
             }
             return userProfile
@@ -43,57 +44,49 @@ class DataManager: DataDelegate {
         
         var nextVersion = 0
         
-        if let userFolder = self.getUserFolder(for: userInitials) {
-            do{
-                let directoryContents = try FileManager.default.contentsOfDirectory(at: userFolder, includingPropertiesForKeys: [.isRegularFileKey], options: [])
-                let versionFiles = directoryContents.filter({ $0.isFileURL && $0.lastPathComponent.starts(with: userInitials ) })
-                for file in versionFiles {
-                    let data = try Data(contentsOf: file)
-                    let decoder = JSONDecoder()
-                    let experimentData = try decoder.decode(ExperimentData.self, from: data)
+        if let directoryContents = self.getUserFiles(for: userInitials, with: [.isRegularFileKey]) {
+            let versionFiles = directoryContents.filter({ $0.isFileURL && $0.lastPathComponent.starts(with: userInitials ) })
+            for file in versionFiles {
+                if let experimentData = self.getExperimentData(for: file) {
                     if experimentData.version >= nextVersion {
                         nextVersion = experimentData.version + 1
                     }
                 }
-            } catch {
-                print("Whooops")
             }
          }
          return nextVersion
-        
+    }
+    
+    func getUserFiles(for initials: String, with keys: [URLResourceKey] = []) -> [URL]? {
+        if let userFolder = self.getUserFolder(for: initials) {
+            do{
+                let directoryContents = try FileManager.default.contentsOfDirectory(at: userFolder, includingPropertiesForKeys: keys, options: [])
+                return directoryContents
+            } catch {
+                print("Problems fetching folder contents")
+            }
+        }
+        return nil
     }
     
     func isExistingUser(_ initials: String) -> Bool {
-        if let userFolder = self.getUserFolder(for: initials) {
-            do {
-                let directoryContents = try FileManager.default.contentsOfDirectory(at: userFolder, includingPropertiesForKeys: [.isRegularFileKey], options: [])
-                let profileFiles = directoryContents.filter({ $0.isFileURL && $0.lastPathComponent.starts(with: "userProfile" ) })
-                if profileFiles.count > 0 {
-                    return true
-               }
-           } catch {
-            print("Whooops")
-           }
+        if let directoryContents = self.getUserFiles(for: initials, with: [.isRegularFileKey]) {
+            let profileFiles = directoryContents.filter({ $0.isFileURL && $0.lastPathComponent.starts(with: "userProfile" ) })
+            return profileFiles.count == 1
        }
        return false
     }
     
     func hasUnfinishedVersions(for userInitials: String) -> ExperimentData? {
            
-       if let userFolder = self.getUserFolder(for: userInitials) {
-           do{
-               let directoryContents = try FileManager.default.contentsOfDirectory(at: userFolder, includingPropertiesForKeys: [.isRegularFileKey], options: [])
-               let versionFiles = directoryContents.filter({ $0.isFileURL && $0.lastPathComponent.starts(with: userInitials ) })
-               for file in versionFiles {
-                   let data = try Data(contentsOf: file)
-                   let decoder = JSONDecoder()
-                   let experimentData = try decoder.decode(ExperimentData.self, from: data)
+        if let directoryContents = self.getUserFiles(for: userInitials) {
+           let versionFiles = directoryContents.filter({ $0.isFileURL && $0.lastPathComponent.starts(with: userInitials ) })
+           for file in versionFiles {
+               if let experimentData = self.getExperimentData(for: file) {
                    if experimentData.hasTrialsLeft {
                        return experimentData
                    }
                }
-           } catch {
-               print("Whooops")
            }
         }
         return nil
@@ -101,21 +94,20 @@ class DataManager: DataDelegate {
     
     func getUserProfile(for initials: String) -> UserProfile? {
         
-        if let userFolder = self.getUserFolder(for: initials) {
-            do {
-                let directoryContents = try FileManager.default.contentsOfDirectory(at: userFolder, includingPropertiesForKeys: [.isRegularFileKey], options: [])
-                let profileFiles = directoryContents.filter({ $0.isFileURL && $0.lastPathComponent.starts(with: "userProfile" ) })
-                if profileFiles.count == 1 {
-                   let data = try Data(contentsOf: profileFiles[0])
-                   let decoder = JSONDecoder()
-                   let profileData = try decoder.decode(UserProfile.self, from: data)
-                   return profileData
-               }
-           } catch {
-            print("Whooops")
-           }
-       }
-       return nil
+        if let directoryContents = self.getUserFiles(for: initials) {
+            let profileFiles = directoryContents.filter({ $0.isFileURL && $0.lastPathComponent.starts(with: "userProfile" ) })
+            if profileFiles.count == 1 {
+                do {
+                    let data = try Data(contentsOf: profileFiles[0])
+                    let decoder = JSONDecoder()
+                    let profileData = try decoder.decode(UserProfile.self, from: data)
+                    return profileData
+                } catch {
+                    print("Problem decoding profile file")
+                }
+            }
+        }
+        return nil
     }
     
     func createUserFolder(for expInfo: [ExperimentParameter: String]) -> URL? {
@@ -145,34 +137,36 @@ class DataManager: DataDelegate {
             let fileName = experimentData.initials + "/" + experimentData.initials + "_" + String(experimentData.version) + ".json"
             let filePath = pathDirectory.appendingPathComponent(fileName)
             let json = try? JSONEncoder().encode(experimentData)
-
             do {
                 try json!.write(to: filePath)
             } catch {
-                print("We fail right?")
+                print("Problem storing progress")
             }
         }
     }
 
     func loadExistingVersion(_ userProfile: UserProfile) -> ExperimentData? {
  
-        var version = 1
-        
-        if let userFolder = self.getUserFolder(for: userProfile.initials) {
-            do{
-                let directoryContents = try FileManager.default.contentsOfDirectory(at: userFolder, includingPropertiesForKeys: [.isRegularFileKey], options: [])
-                let versionFiles = directoryContents.filter({ $0.isFileURL && $0.lastPathComponent.starts(with: userProfile.initials ) })
-                for file in versionFiles {
-                    let data = try Data(contentsOf: file)
-                    let decoder = JSONDecoder()
-                    let experimentData = try decoder.decode(ExperimentData.self, from: data)
+        if let directoryContents = self.getUserFiles(for: userProfile.initials) {
+            let versionFiles = directoryContents.filter({ $0.isFileURL && $0.lastPathComponent.starts(with: userProfile.initials ) })
+            for file in versionFiles {
+                if let experimentData = self.getExperimentData(for: file) {
                     if experimentData.hasTrialsLeft { return experimentData }
-                    version += 1
                 }
-            } catch {
-                print("Whooops")
             }
         }
         return nil
-    }    
+    }
+    
+    func getExperimentData(for file: URL) -> ExperimentData? {
+        do {
+            let data = try Data(contentsOf: file)
+            let decoder = JSONDecoder()
+            let experimentData = try decoder.decode(ExperimentData.self, from: data)
+            return experimentData
+        } catch {
+            print("Data decoding failed")
+        }
+        return nil
+    }
 }

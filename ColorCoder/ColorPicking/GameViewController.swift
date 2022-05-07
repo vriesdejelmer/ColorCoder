@@ -113,14 +113,7 @@ class GameViewController: SubCompViewController, ExitDelegate {
     }
     
     func closeSession() {
-        let completeAlert = UIAlertController(title: "Experiment Complete", message: "You have completed the experiment, thank you for your participation", preferredStyle: .alert)
-
-        completeAlert.addAction(UIAlertAction(title: "Finally!", style: .default) {_ in
-            self.dismiss(animated: true)
-        })
-
-        self.present(completeAlert, animated: false)
-        
+        self.showAlert(with: "Experiment Complete", message: "You have completed the experiment, thank you for your participation", buttonText: "Finally!", isDismissing: true)
     }
   
     @objc func deviceOrientationDidChange(_ notification: Notification) {
@@ -156,19 +149,11 @@ extension GameViewController: DisplayDelegate {
     }
 
     func showInstructions() {
-        let instructionAlert = UIAlertController(title: "Instructions, Please Read", message: "Welcome to the experiment! Each trial starts upon placing the finger in the center ring, which will change in color. Upon this color change, please select, from the surroundings disks, the disk that is most similar (?) in color. While it is not important to be as fast as possible, please do not overthink and try to respond promptly.", preferredStyle: .alert)
-
-        instructionAlert.addAction(UIAlertAction(title: "OK", style: .default))
-
-        self.present(instructionAlert, animated: false)
+        self.showAlert(with: "Instructions, Please Read", message: "Welcome to the experiment! Each trial starts upon placing the finger in the center ring, which will change in color. Upon this color change, please select, from the surroundings disks, the disk that is most similar (?) in color. While it is not important to be as fast as possible, please do not overthink and try to respond promptly.", buttonText: "OK", isDismissing: false)
     }
     
     func displayProgress(trialNumber: Int, trialsLeft: Int) {
-        let progressAlert = UIAlertController(title: "Progress Report", message: "You have completed \(trialNumber) trials and have \(trialsLeft) trials left. You can take a break at any time by closing the game using the cross in the top right corner of the screen and restarting by going to the existing user tab and selecting your initials from the list", preferredStyle: .alert)
-
-        progressAlert.addAction(UIAlertAction(title: "OK", style: .default))
-
-        self.present(progressAlert, animated: false)
+        self.showAlert(with: "Progress Report", message: "You have completed \(trialNumber) trials and have \(trialsLeft) trials left. You can take a break at any time by closing the game using the cross in the top right corner of the screen and restarting by going to the existing user tab and selecting your initials from the list", buttonText: "OK", isDismissing: false)
     }
     
 }

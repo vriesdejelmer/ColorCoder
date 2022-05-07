@@ -70,7 +70,7 @@ class ExperimentScene: GameScene {
         self.experimentData.addTrial(number: trialCounter, targetOffset: self.nextTargetStep, nodeOffset: self.nextNodeStep, trialTime: self.trialTime!, response: selectedIndex, leftIndex: self.startIndex)
 
         if self.experimentData.hasTrialsLeft {
-            if (self.trialCounter+1) % GeneralSettings.progressTrials == 0 {
+            if (self.trialCounter+1) % GeneralSettings.DefaultParams.progressTrials == 0 {
                 self.displayDelegate?.displayProgress(trialNumber: self.trialCounter+1, trialsLeft: self.experimentData.trialsLeft)
             }
             

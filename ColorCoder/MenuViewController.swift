@@ -10,7 +10,7 @@ import UIKit
 
 class MenuViewController: BaseViewController {
 
-    let buttonList: [ControlItem] = [.practice, .play, .userProfiles, .settings]
+    let buttonList: [ControlItem] = [.practice, .run, .userProfiles, .settings]
     var dataManager: DataManager!
     var encapsulatingNC: UINavigationController?
 
@@ -49,7 +49,7 @@ class MenuViewController: BaseViewController {
     @objc func buttonPressed(_ sender: ControlButton) {
         switch sender.controlItem! {
         case .practice: self.pushGameController()
-        case .play: self.runExperiment()
+        case .run: self.runExperiment()
         case .userProfiles: self.pushUPController()
         case .settings: self.pushSettingsController()
         }
@@ -105,12 +105,12 @@ class ControlButton: UIButton {
 }
 
 enum ControlItem {
-    case practice, play, settings, userProfiles
+    case practice, run, settings, userProfiles
 
     var displayName: String {
         switch self {
         case .practice: return "Practice"
-        case .play: return "Play"
+        case .run: return "Run Experiment"
         case .settings: return "Settings"
         case .userProfiles: return "User Profiles"
         }

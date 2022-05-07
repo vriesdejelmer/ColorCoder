@@ -12,7 +12,6 @@ class UserProfileController: UIViewController, UITableViewDataSource, UITableVie
 
     var tableView: UITableView!
     let userItems: [ExperimentParameter] = [.initials, .age, .sex]
-    let cellIdentifier = "TitleCell"
     var createButton: UIButton!
     var dataDelegate: DataDelegate?
     var userInfo = [ExperimentParameter: String]() {
@@ -51,39 +50,26 @@ class UserProfileController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     @objc func createUser(_ sender: UIButton) {
-        if let initials = self.userInfo[.initials] {
+        
+        if !self.allUserItemsFilled {
+            self.showAlert(with: "Missing Fields", message: "Please ensure you fill out all fields", buttonText: "Understood", isDismissing: false)
+        } else if let initials = self.userInfo[.initials] {
 
             if self.dataDelegate?.isExistingUser(initials) ?? false {
-                let userExistsAlert = UIAlertController(title: "User Exists", message: "This user already exists. If you created a profile before, you can start/continue the experiment. If this isn't you, please chose different initials", preferredStyle: .alert)
-                
-                userExistsAlert.addAction(UIAlertAction(title: "Great!", style: .default))
-                self.present(userExistsAlert, animated: true)
+                self.showAlert(with: "User Exists", message: "A user with these initials already exists. If you created a profile before, you can start/continue the experiment. If you haven't, please chose different initials", buttonText: "Understood", isDismissing: false)
             } else if let profile = self.dataDelegate?.createUserProfile(for: self.userInfo) {
-                let userCreatedAlert = UIAlertController(title: "User Created", message: "You have created a new user (with initials: \(profile.initials)), you can now select this user and run an experiment", preferredStyle: .alert)
-                
-                userCreatedAlert.addAction(UIAlertAction(title: "Great!", style: .default) {_ in
-                    self.dismiss(animated: true)
-                })
-                
-                self.present(userCreatedAlert, animated: true)
+                self.showAlert(with: "User Created", message: "You have created a new user (with initials: \(profile.initials)), you can now select this user and run an experiment", buttonText: "Let's Go!", isDismissing: true)
             } else {
-                let creatingUnsuccessful = UIAlertController(title: "Problem creating user", message: "We had an issue creating this profile, please try again.", preferredStyle: .alert)
-                creatingUnsuccessful.addAction(UIAlertAction(title: "Hmmmmm", style: .default) {_ in
-                    self.dismiss(animated: true)
-                })
-                self.present(creatingUnsuccessful, animated: true)
+                self.showAlert(with: "Problem creating user", message: "We had an issue creating this profile, please try again.", buttonText: "Sorry", isDismissing: true)
             }
         }
-        
-        
-        
     }
     
     func setupTableView() {
         self.tableView = UITableView()
         self.tableView.translatesAutoresizingMaskIntoConstraints = false
         self.tableView.layer.cornerRadius = 15
-        self.tableView.register(TitleCell.self, forCellReuseIdentifier: self.cellIdentifier)
+        self.tableView.register(TitleCell.self, forCellReuseIdentifier: GeneralSettings.Constants.TitleCell)
         self.tableView.tableFooterView  = UIView()
         self.tableView.dataSource = self
         self.tableView.delegate = self
@@ -100,7 +86,9 @@ class UserProfileController: UIViewController, UITableViewDataSource, UITableVie
         self.view.addConstraints(tableViewConstraints)
         
         let buttonConstraints = [NSLayoutConstraint(item: self.view!, attribute: .bottomMargin, relatedBy: .equal, toItem: self.createButton, attribute: .bottom, multiplier: 1, constant: 20),
-        NSLayoutConstraint(item: self.view!, attribute: .trailingMargin, relatedBy: .equal, toItem: self.createButton, attribute: .trailing, multiplier: 1, constant: 0)]
+        NSLayoutConstraint(item: self.view!, attribute: .trailingMargin, relatedBy: .equal, toItem: self.createButton, attribute: .trailing, multiplier: 1, constant: 0),
+        self.createButton.heightAnchor.constraint(equalToConstant: 40),
+        self.createButton.widthAnchor.constraint(equalToConstant: 150)]
         self.view.addConstraints(buttonConstraints)
                                
     }
@@ -118,7 +106,7 @@ class UserProfileController: UIViewController, UITableViewDataSource, UITableVie
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if let selectedCell = self.tableView.dequeueReusableCell(withIdentifier: self.cellIdentifier, for: indexPath) as? TitleCell {
+        if let selectedCell = self.tableView.dequeueReusableCell(withIdentifier: GeneralSettings.Constants.TitleCell, for: indexPath) as? TitleCell {
             selectedCell.userInfDelegate = self
             selectedCell.userItem = userItems[indexPath.row]
             return selectedCell
