@@ -22,7 +22,8 @@ public class GeneralSettings {
     }
     
     public struct Constants {
-        public static let TitleCell: String = "TitleCell"
+        public static let SegmentCell: String = "SegmentCell"
+        public static let TextCell: String = "TextCell"
         public static let CoderNotInitialzed: String = "init(coder:) has not been implemented"
     }
     
@@ -42,6 +43,17 @@ public class GeneralSettings {
 
     public static var nodeEccentricity: CGFloat {
         get { return CGFloat(defaults.float(forKey: SettingsKey.eccentricityFactor))*270+120 }
+    }
+    
+    public static var nodeOrdering: NodeOrdering {
+        set { defaults.set(newValue.rawValue, forKey: SettingsKey.nodeOrdering) }
+        get {
+            if let orderingString = defaults.string(forKey: SettingsKey.nodeOrdering), let nodeOrder = NodeOrdering(rawValue: orderingString) {
+                return nodeOrder
+            } else {
+                return .leftToRight
+            }
+        }
     }
     
     public static var stimDiamFactor: CGFloat {
@@ -92,9 +104,10 @@ extension UserDefaults {
 
 
 public struct SettingsKey {
-    static let sizeFactor        = "SizeFactor"
-    static let eccentricityFactor         = "EccentricityFactor"
+    public static let sizeFactor        = "SizeFactor"
+    public static let eccentricityFactor         = "EccentricityFactor"
     public static let backgroundGray  = "BackgroundColor"
+    public static let nodeOrdering = "NodeOrdering"
 
 }
 

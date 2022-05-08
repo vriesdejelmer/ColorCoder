@@ -12,6 +12,7 @@ class ExperimentData: Codable {
     
     var targetSteps: Int
     var nodeSteps: Int
+    var nodeOrdering: NodeOrdering
     var backgroundShade: CGFloat
     var centerDistance: CGFloat
     var stimulusDiameter: CGFloat
@@ -19,6 +20,7 @@ class ExperimentData: Codable {
     private var elementLocations = [CGPoint]()
     private var trialNumbers = [Int]()
     private var nodeOffsets = [Int]()
+    private var nodeOrderings = [[Int]]()
     private var targetOffsets = [Int]()
     private var trialResponses = [Int]()
     private var trialTimes = [Double]()
@@ -44,6 +46,7 @@ class ExperimentData: Codable {
         }
         self.initials = expInfo[.initials]!
         self.targetSteps = Int(expInfo[.targetSteps]!)!
+        self.nodeOrdering = NodeOrdering(rawValue: expInfo[.nodeOrdering]!)!
         self.nodeSteps = Int(expInfo[.nodeSteps]!)!
         self.backgroundShade = Double(expInfo[.backgroundShade]!).map{ CGFloat($0) }!
         self.centerDistance = Double(expInfo[.nodeEccentricity]!).map{ CGFloat($0) }!
@@ -58,6 +61,7 @@ class ExperimentData: Codable {
         self.targetSteps = targetSteps
         self.nodeSteps = nodeSteps
         self.backgroundShade = GeneralSettings.backgroundGray
+        self.nodeOrdering = GeneralSettings.nodeOrdering
         self.centerDistance = GeneralSettings.nodeEccentricity
         self.stimulusDiameter = GeneralSettings.nodeDiameter
         
@@ -87,7 +91,7 @@ class ExperimentData: Codable {
         }
     }
     
-    func addTrial(number: Int, targetOffset: Int, nodeOffset: Int, trialTime: Double, response: Int, leftIndex: Int) {
+    func addTrial(number: Int, targetOffset: Int, nodeOffset: Int, trialTime: Double, response: Int, leftIndex: Int, ordering: [Int]) {
         
         if (trialNumbers.count == nodeOffsets.count && trialNumbers.count == trialResponses.count && trialNumbers.count == targetOffsets.count) {
             self.trialNumbers.append(number)
@@ -96,6 +100,7 @@ class ExperimentData: Codable {
             self.nodeOffsets.append(nodeOffset)
             self.trialTimes.append(trialTime)
             self.leftIndices.append(leftIndex)
+            self.nodeOrderings.append(ordering)
         } else {
             fatalError("Crucial Data Collection Error")
         }

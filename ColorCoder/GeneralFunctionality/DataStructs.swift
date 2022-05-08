@@ -24,9 +24,9 @@ enum SettingsItem: String {
     }
 }
 
-enum ExperimentParameter: String, Codable {
+enum ExperimentParameter: String {
     
-    case age, initials, sex, targetSteps, nodeSteps, backgroundShade, nodeDiameter, nodeEccentricity, version
+    case age, initials, sex, targetSteps, nodeSteps, backgroundShade, nodeDiameter, nodeEccentricity, version, nodeOrdering
 
     var displayName: String {
         switch self {
@@ -39,6 +39,7 @@ enum ExperimentParameter: String, Codable {
         case .nodeDiameter: return "Node Diameter"
         case .backgroundShade: return "Background Grey Level"
         case .version: return "Version"
+        case .nodeOrdering: return "Random Node Ordering"
         }
     }
     
@@ -47,12 +48,13 @@ enum ExperimentParameter: String, Codable {
         case .age: return "whole number 18, 19, 20, .."
         case .initials: return "(min 3 characters)"
         case .sex: return "(M, F, O)"
-        case .targetSteps: return "(experimenter only)"
-        case .nodeSteps: return "(experimenter only)"
-        case .nodeEccentricity: return "(experimenter only)"
-        case .nodeDiameter: return "(experimenter only)"
-        case .backgroundShade: return "(experimenter only)"
+        case .targetSteps: return "number of target variations"
+        case .nodeSteps: return "number of shifts in node hue"
+        case .nodeEccentricity: return "node to center distance"
+        case .nodeDiameter: return "node diameter"
+        case .backgroundShade: return "background gray [0-1]"
         case .version: return "(shouldn't be set manually)"
+        case .nodeOrdering: return "Node ordering (l-to-r or random)"
         }
     }
     
@@ -69,6 +71,11 @@ enum ExperimentParameter: String, Codable {
         case .nodeEccentricity: return "\(GeneralSettings.nodeEccentricity)"
         default: return ""
         }
+    }
+    
+    func getCellType() -> InputCellType {
+        if self == .nodeOrdering { return .switchCell }
+        return .textCell
     }
 }
 

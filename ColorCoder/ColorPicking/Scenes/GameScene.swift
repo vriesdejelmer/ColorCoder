@@ -14,6 +14,7 @@ class GameScene: SKScene, ChoiceDelegate, GameDelegate {
     weak var exitDelegate: ExitDelegate?
     weak var displayDelegate: DisplayDelegate?
     var colorChoices = [ColorClickNode]()
+    var ordering: NodeOrdering { return .leftToRight }
     
     var leftRotation: Bool = true
     
@@ -38,6 +39,7 @@ class GameScene: SKScene, ChoiceDelegate, GameDelegate {
         //Trial caching
     var nextTargetStep: Int!
     var startIndex: Int = 0
+    var nodeOrdering: [Int]!
     var nextNodeStep: Int!
     
     var centerColor: UIColor {
@@ -110,10 +112,24 @@ class GameScene: SKScene, ChoiceDelegate, GameDelegate {
     }
     
     func setNextTrialParameters() {
-        self.startIndex += Int(ceil(Double(self.numberOfNodes)/2))
+        
+        self.nodeOrdering = self.getNextNodeOrdering()
        
         self.nextNodeStep = Int.random(in: 0..<self.nodeSteps)
         self.nextTargetStep = Int.random(in: 0..<self.targetHueSteps)
+    }
+    
+    func getNextNodeOrdering() -> [Int] {
+        if self.ordering == .leftToRight {
+            self.startIndex += Int(ceil(Double(self.numberOfNodes)/2))
+            return Array(self.startIndex...(self.startIndex+self.numberOfNodes-1)).map { $0 % self.numberOfNodes }
+        } else {
+            var newOrdering = Array(0..<self.numberOfNodes).shuffled()
+            while newOrdering == self.nodeOrdering {
+                newOrdering = Array(0..<self.numberOfNodes).shuffled()
+            }
+            return newOrdering
+        }
     }
     
     func centerControlNode() {
@@ -131,10 +147,9 @@ class GameScene: SKScene, ChoiceDelegate, GameDelegate {
     
     func positionAndColorNodes(shuffle: Bool = true) {
         
-        let nodeIndices: [Int] = Array(self.startIndex...(self.startIndex+self.numberOfNodes-1)).map { $0 % self.numberOfNodes }
         let rotationOffset = self.getRotationOffset()
         
-        for (index, nodeIndex) in nodeIndices.enumerated() {
+        for (index, nodeIndex) in self.nodeOrdering.enumerated() {
             let node = colorChoices[nodeIndex]
             node.hue = CGFloat(nodeIndex*self.nodeSteps + self.nextNodeStep)/CGFloat(self.numberOfNodes*self.nodeSteps)
             
@@ -184,4 +199,8 @@ protocol GameDelegate: AnyObject {
 
 protocol ChoiceDelegate: AnyObject {
     func selected(_ selectedIndex: Int)
+}
+
+public enum NodeOrdering: String, Codable {
+    case shuffled = "RND", leftToRight = "LTR"
 }

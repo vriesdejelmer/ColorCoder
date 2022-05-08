@@ -15,6 +15,7 @@ class ExperimentScene: GameScene {
         //trials
     var trialCounter = 0
     var trialResponses: [Int]!
+    override var ordering: NodeOrdering { return experimentData.nodeOrdering }
     
     override var nodeSteps: Int {
         return experimentData.nodeSteps
@@ -65,7 +66,7 @@ class ExperimentScene: GameScene {
             self.trialTime = CFAbsoluteTimeGetCurrent() - startTime
         }
         
-        self.experimentData.addTrial(number: trialCounter, targetOffset: self.nextTargetStep, nodeOffset: self.nextNodeStep, trialTime: self.trialTime!, response: selectedIndex, leftIndex: self.startIndex)
+        self.experimentData.addTrial(number: trialCounter, targetOffset: self.nextTargetStep, nodeOffset: self.nextNodeStep, trialTime: self.trialTime!, response: selectedIndex, leftIndex: self.startIndex, ordering: self.nodeOrdering)
 
         if self.experimentData.hasTrialsLeft {
             if (self.trialCounter+1) % GeneralSettings.DefaultParams.progressTrials == 0 {

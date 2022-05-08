@@ -69,7 +69,7 @@ class UserProfileController: UIViewController, UITableViewDataSource, UITableVie
         self.tableView = UITableView()
         self.tableView.translatesAutoresizingMaskIntoConstraints = false
         self.tableView.layer.cornerRadius = 15
-        self.tableView.register(TitleCell.self, forCellReuseIdentifier: GeneralSettings.Constants.TitleCell)
+        self.tableView.register(TextSettingCell.self, forCellReuseIdentifier: GeneralSettings.Constants.TextCell)
         self.tableView.tableFooterView  = UIView()
         self.tableView.dataSource = self
         self.tableView.delegate = self
@@ -106,7 +106,7 @@ class UserProfileController: UIViewController, UITableViewDataSource, UITableVie
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if let selectedCell = self.tableView.dequeueReusableCell(withIdentifier: GeneralSettings.Constants.TitleCell, for: indexPath) as? TitleCell {
+        if let selectedCell = self.tableView.dequeueReusableCell(withIdentifier: GeneralSettings.Constants.TextCell, for: indexPath) as? TextSettingCell {
             selectedCell.userInfDelegate = self
             selectedCell.userItem = userItems[indexPath.row]
             return selectedCell
