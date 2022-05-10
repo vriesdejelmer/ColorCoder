@@ -26,7 +26,7 @@ enum SettingsItem: String {
 
 enum ExperimentParameter: String {
     
-    case age, initials, sex, targetSteps, nodeSteps, backgroundShade, nodeDiameter, nodeEccentricity, version, nodeOrdering
+    case age, initials, sex, targetSteps, nodeSteps, backgroundShade, nodeDiameter, nodeEccentricity, version, nodeOrdering, screenOrientation
 
     var displayName: String {
         switch self {
@@ -40,6 +40,7 @@ enum ExperimentParameter: String {
         case .backgroundShade: return "Background Grey Level"
         case .version: return "Version"
         case .nodeOrdering: return "Random Node Ordering"
+        case .screenOrientation: return "Screen Orientation"
         }
     }
     
@@ -55,26 +56,12 @@ enum ExperimentParameter: String {
         case .backgroundShade: return "background gray [0-1]"
         case .version: return "(shouldn't be set manually)"
         case .nodeOrdering: return "Node ordering (l-to-r or random)"
-        }
-    }
-    
-    var hasDefault: Bool {
-        return self == .targetSteps || self == .nodeSteps || self == .backgroundShade || self == .nodeDiameter || self == .nodeEccentricity
-    }
-    
-    func getDefault() -> String {
-        switch self {
-        case .targetSteps: return "\(GeneralSettings.DefaultParams.targetSteps)"
-        case .nodeSteps: return "\(GeneralSettings.DefaultParams.nodeSteps)"
-        case .backgroundShade: return "\(GeneralSettings.backgroundGray)"
-        case .nodeDiameter: return "\(GeneralSettings.nodeDiameter)"
-        case .nodeEccentricity: return "\(GeneralSettings.nodeEccentricity)"
-        default: return ""
+        case .screenOrientation: return "vertical or horizontal"
         }
     }
     
     func getCellType() -> InputCellType {
-        if self == .nodeOrdering { return .switchCell }
+        if self == .nodeOrdering || self == .screenOrientation { return .switchCell }
         return .textCell
     }
 }

@@ -56,6 +56,18 @@ public class GeneralSettings {
         }
     }
     
+    public static var screenRotation: ScreenOrientation {
+        set { defaults.set(newValue.rawValue, forKey: SettingsKey.screenRotation) }
+        get {
+            if let orientationString = defaults.string(forKey: SettingsKey.screenRotation), let orientation = ScreenOrientation(rawValue: orientationString) {
+                return orientation
+            } else {
+                return .horizontal
+            }
+        }
+    }
+    
+    
     public static var stimDiamFactor: CGFloat {
         get { return CGFloat(defaults.float(forKey: SettingsKey.sizeFactor)) }
         set { defaults.set(Float(newValue), forKey: SettingsKey.sizeFactor) }
@@ -108,7 +120,7 @@ public struct SettingsKey {
     public static let eccentricityFactor         = "EccentricityFactor"
     public static let backgroundGray  = "BackgroundColor"
     public static let nodeOrdering = "NodeOrdering"
-
+    public static let screenRotation = "ScreenRotation"
 }
 
 struct SegueIdentifier {

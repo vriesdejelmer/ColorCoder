@@ -12,8 +12,8 @@ class ExperimentEntryController: UIViewController, UserInfoDelegate, UITableView
 
     var rightButton: UIBarButtonItem!
     var tableView: UITableView!
-    let userItems: [ExperimentParameter] = [.nodeOrdering, .targetSteps, .nodeSteps, .nodeDiameter, .nodeEccentricity, .backgroundShade]
-    var expInfo: [ExperimentParameter: String] = [.targetSteps: "\(GeneralSettings.DefaultParams.targetSteps)", .nodeSteps: "\(GeneralSettings.DefaultParams.nodeSteps)", .nodeDiameter: "\(GeneralSettings.nodeDiameter)", .nodeEccentricity: "\(GeneralSettings.nodeEccentricity)", .backgroundShade: "\(GeneralSettings.backgroundGray)", .nodeOrdering: "\(GeneralSettings.nodeOrdering.rawValue)"]
+    let userItems: [ExperimentParameter] = [.nodeOrdering, .screenOrientation, .targetSteps, .nodeSteps, .nodeDiameter, .nodeEccentricity, .backgroundShade]
+    var expInfo: [ExperimentParameter: String] = [.targetSteps: "\(GeneralSettings.DefaultParams.targetSteps)", .nodeSteps: "\(GeneralSettings.DefaultParams.nodeSteps)", .nodeDiameter: "\(GeneralSettings.nodeDiameter)", .nodeEccentricity: "\(GeneralSettings.nodeEccentricity)", .backgroundShade: "\(GeneralSettings.backgroundGray)", .nodeOrdering: "\(GeneralSettings.nodeOrdering.rawValue)", .screenOrientation: "\(GeneralSettings.screenRotation.rawValue)"]
     var expData: ExperimentData?
 
     
@@ -63,6 +63,7 @@ class ExperimentEntryController: UIViewController, UserInfoDelegate, UITableView
         expInfo[.targetSteps] = "\(expData.targetSteps)"
         expInfo[.nodeSteps] = "\(expData.nodeSteps)"
         expInfo[.nodeOrdering] = "\(expData.nodeOrdering.rawValue)"
+        expInfo[.screenOrientation] = "\(expData.screenOrientation.rawValue)"
         self.tableView.reloadData()
     }
     
@@ -77,9 +78,9 @@ class ExperimentEntryController: UIViewController, UserInfoDelegate, UITableView
         
         self.rightButton = UIBarButtonItem(barButtonSystemItem: .play, target: self, action: #selector(ExperimentEntryController.finished(_:)))
         self.rightButton.isEnabled = false
+        self.rightButton.tintColor = .systemGreen
         self.navigationItem.setRightBarButton(rightButton, animated: false)
         
-        print(GeneralSettings.nodeOrdering)
     }
     
     func addNewVersionSwitch() {
@@ -172,11 +173,11 @@ class ExperimentEntryController: UIViewController, UserInfoDelegate, UITableView
         
         let userItem = userItems[indexPath.row]
         
-        let selectedCell: SettingCell?
+        let selectedCell: SettingCellProtocol?
         if userItem.getCellType() == .switchCell {
-            selectedCell = self.tableView.dequeueReusableCell(withIdentifier: GeneralSettings.Constants.SegmentCell, for: indexPath) as? SettingCell
+            selectedCell = self.tableView.dequeueReusableCell(withIdentifier: GeneralSettings.Constants.SegmentCell, for: indexPath) as? SettingCellProtocol
         } else {
-            selectedCell = self.tableView.dequeueReusableCell(withIdentifier: GeneralSettings.Constants.TextCell, for: indexPath) as? SettingCell
+            selectedCell = self.tableView.dequeueReusableCell(withIdentifier: GeneralSettings.Constants.TextCell, for: indexPath) as? SettingCellProtocol
         }
         
         if let cell = selectedCell {

@@ -60,8 +60,8 @@ public class ExitButton: UIButton {
                 context.setStrokeColor(color.withAlphaComponent(transparency).cgColor)
                 context.setFillColor(color.withAlphaComponent(transparency).cgColor)
             } else {
-                context.setStrokeColor(UIColor.black.cgColor)
-                context.setFillColor(UIColor.black.cgColor)
+                context.setStrokeColor(UIColor.darkGray.cgColor)
+                context.setFillColor(UIColor.darkGray.cgColor)
             }
 
             self.resetSizeParameters()

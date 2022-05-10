@@ -16,8 +16,8 @@ class ExperimentData: Codable {
     var backgroundShade: CGFloat
     var centerDistance: CGFloat
     var stimulusDiameter: CGFloat
+    var screenOrientation: ScreenOrientation
     
-    private var elementLocations = [CGPoint]()
     private var trialNumbers = [Int]()
     private var nodeOffsets = [Int]()
     private var nodeOrderings = [[Int]]()
@@ -51,23 +51,10 @@ class ExperimentData: Codable {
         self.backgroundShade = Double(expInfo[.backgroundShade]!).map{ CGFloat($0) }!
         self.centerDistance = Double(expInfo[.nodeEccentricity]!).map{ CGFloat($0) }!
         self.stimulusDiameter = Double(expInfo[.nodeDiameter]!).map{ CGFloat($0) }!
-        
+        self.stimulusDiameter = Double(expInfo[.nodeDiameter]!).map{ CGFloat($0) }!
+        self.screenOrientation = ScreenOrientation(rawValue: expInfo[.screenOrientation]!)!
         self.comboArray = self.createComboArray()
     }
-    
-    init(_ userProfile: UserProfile, version: Int, targetSteps: Int, nodeSteps: Int) {
-        self.version = version
-        self.initials = userProfile.initials
-        self.targetSteps = targetSteps
-        self.nodeSteps = nodeSteps
-        self.backgroundShade = GeneralSettings.backgroundGray
-        self.nodeOrdering = GeneralSettings.nodeOrdering
-        self.centerDistance = GeneralSettings.nodeEccentricity
-        self.stimulusDiameter = GeneralSettings.nodeDiameter
-        
-        self.comboArray = self.createComboArray()
-    }
-    
     
     func createComboArray() -> [TrialParam] {
         let baseHueArray: [Int] = Array(0..<self.targetSteps)

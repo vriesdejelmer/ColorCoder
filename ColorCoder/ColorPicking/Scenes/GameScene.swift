@@ -90,9 +90,9 @@ class GameScene: SKScene, ChoiceDelegate, GameDelegate {
     
     func getMidPoint() -> CGPoint {
         if self.orientation == .vertical {
-            return CGPoint(x: self.frame.center.x, y: self.frame.center.y*0.9)
+            return CGPoint(x: self.frame.center.x, y: self.frame.center.y)
         } else {
-            return CGPoint(x: self.frame.center.x, y: self.frame.center.y*0.8)
+            return CGPoint(x: self.frame.center.x, y: self.frame.center.y*0.95)
         }
     }
 
@@ -203,4 +203,16 @@ protocol ChoiceDelegate: AnyObject {
 
 public enum NodeOrdering: String, Codable {
     case shuffled = "RND", leftToRight = "LTR"
+}
+
+public enum ScreenOrientation: String, Codable {
+    case vertical = "VER", horizontal = "HOR"
+    
+    var longName: String {
+        switch self {
+        case .vertical: return "PORTRAIT"
+        case .horizontal: return "LANDSCAPE"
+        }
+        
+    }
 }

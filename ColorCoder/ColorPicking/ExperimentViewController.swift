@@ -39,7 +39,8 @@ class ExperimentViewController: SubCompViewController, ExitDelegate {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
+        UIScreen.main.brightness = CGFloat(0.74) //Hacky, but this seems to ensure it works
+        UIScreen.main.brightness = CGFloat(0.75) //Should work best in viewDidAppear
         self.showInstructions()
         
     }
@@ -54,7 +55,6 @@ class ExperimentViewController: SubCompViewController, ExitDelegate {
 
     func setupGameView() {
         self.gameView   = SKView()
-        UIScreen.main.brightness = CGFloat(0.5)
         if self.experimentMode == .practice {
             self.gameView.layer.cornerRadius    = 5
             self.gameView.layer.borderColor     = UIColor.gray.cgColor
@@ -122,24 +122,38 @@ class ExperimentViewController: SubCompViewController, ExitDelegate {
     }
     
     func displayWarningIfNeeded() {
-        if self.experimentMode == .experiment {
+        if self.experimentMode == .experiment, let expData = self.experimentData {
             let orientation = UIDevice.current.orientation
-            if !(orientation == .landscapeLeft || orientation == .landscapeRight) {
-                if alert == nil {
-                    self.alert = UIAlertController(title: "Wrong Orientation", message: "The Experiment should be performed whilest keeping the ipad in Landscape mode, please rotate the ipad correctly", preferredStyle: .alert )
-                    self.present(self.alert!, animated: false)
+            if expData.screenOrientation == .horizontal {
+                if !(orientation == .landscapeLeft || orientation == .landscapeRight) {
+                    self.displayOrientationWarning(expData.screenOrientation)
+                } else {
+                    self.removeOrientationWarning()
                 }
             } else {
-                if let alert = self.alert {
-                    alert.dismiss(animated: false) {
-                        self.alert = nil
-                    }
+                if !(orientation == .portrait || orientation == .portraitUpsideDown) {
+                    self.displayOrientationWarning(expData.screenOrientation)
+                } else {
+                    self.removeOrientationWarning()
                 }
             }
         }
     }
     
-
+    func displayOrientationWarning(_ orientation: ScreenOrientation) {
+        if alert == nil {
+            self.alert = UIAlertController(title: "Wrong Orientation", message: "The Experiment should be performed whilest keeping the ipad in \(orientation.longName) mode, please rotate the ipad correctly", preferredStyle: .alert )
+            self.present(self.alert!, animated: false)
+        }
+    }
+    
+    func removeOrientationWarning() {
+        if let alert = self.alert {
+            alert.dismiss(animated: false) {
+                self.alert = nil
+            }
+        }
+    }
     
 }
 

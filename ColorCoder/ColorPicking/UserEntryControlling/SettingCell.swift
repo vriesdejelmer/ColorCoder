@@ -8,12 +8,29 @@
 
 import UIKit
 
+protocol SettingCellProtocol: UITableViewCell {
+    var type: InputCellType { get }
+    
+    var titleLabel: UILabel { get }
+    var instructionLabel: UILabel! { get }
+    var isUserInteractionEnabled: Bool { get set }
+    var userItem: ExperimentParameter! { get set }
+    var inputItem: UIControl { get }
+    var userInfDelegate: UserInfoDelegate? { get set }
+    var titleText: String! { get set }
+    func addInputField()
+    func setInput(to value: String)
+}
 
 class SettingCell: UITableViewCell {
-    let itemSelection = [NodeOrdering.leftToRight.rawValue, NodeOrdering.shuffled.rawValue]
-    var type: InputCellType { .textCell }
-    let titleLabel: UILabel
+    var titleLabel: UILabel
     var instructionLabel: UILabel!
+    var userInfDelegate: UserInfoDelegate?
+    
+    var titleText: String! {
+        didSet { self.setTextToTitleLabel() }
+    }
+    
     override var isUserInteractionEnabled: Bool {
         didSet {
             self.contentView.isUserInteractionEnabled = self.isUserInteractionEnabled
@@ -24,40 +41,39 @@ class SettingCell: UITableViewCell {
             }
         }
     }
+    
     var userItem: ExperimentParameter! {
         didSet {
             self.titleText = userItem.displayName
             self.instructionLabel.text = self.userItem.instruction
         }
     }
-    var inputItem: UIControl {
-        if self.type == .textCell { return self.textField }
-        else { return self.segmentedControl }
-    }
-    weak var userInfDelegate: UserInfoDelegate?
-    var textField: UITextField!
-    var segmentedControl: UISegmentedControl!
-    var titleText: String! {
-        didSet { self.setTextToTitleLabel() } }
-
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         self.titleLabel = UILabel()
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.backgroundColor = .lightGray
-        self.configureCell()
+        (self as? SettingCellProtocol)?.configureCell()
     }
     
     required init?(coder: NSCoder) {
         fatalError(GeneralSettings.Constants.CoderNotInitialzed)
     }
     
+    func setTextToTitleLabel() {    //didset call
+        titleLabel.text = titleText
+        titleLabel.sizeToFit()
+    }
+    
     override func layoutSubviews() {
         super.layoutSubviews()
         self.contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20))
     }
-
+}
+    
+extension SettingCellProtocol {
+    
     func configureCell() {
-        
         self.addTitleLabel()
         self.addInputField()
         
@@ -84,26 +100,39 @@ class SettingCell: UITableViewCell {
         
         self.addConstraints(placementConstraints)
     }
+
+}
+
+//class OrientationCell: SegmentSettingCell {
+//    override var itemSelection: [String]! { return [ScreenOrientation.horizontal.rawValue, ScreenOrientation.vertical.rawValue] }
+//}
+//
+//class NodeOrderingCell: SegmentSettingCell {
+//    override var itemSelection: [String]! { return [NodeOrdering.leftToRight.rawValue, NodeOrdering.shuffled.rawValue] }
+//}
+
+class SegmentSettingCell: SettingCell, SettingCellProtocol {
     
-    func addInputField() {
-        
-    }
-        
-    private func setTextToTitleLabel() {    //didset call
-        titleLabel.text = titleText
-        titleLabel.sizeToFit()
+    var type: InputCellType { return .switchCell }
+    var inputItem: UIControl { return self.segmentedControl }
+    var segmentedControl: UISegmentedControl!
+    
+    var itemSelection = ["1", "2"]
+    
+    override var userItem: ExperimentParameter! {
+        didSet {
+            //THIS is definitely an ugly hack!
+            if userItem == .screenOrientation {
+                self.itemSelection = [ScreenOrientation.horizontal.rawValue, ScreenOrientation.vertical.rawValue]
+            } else {
+                self.itemSelection = [NodeOrdering.leftToRight.rawValue, NodeOrdering.shuffled.rawValue]
+            }
+            self.segmentedControl.setTitle(self.itemSelection[0], forSegmentAt: 0)
+            self.segmentedControl.setTitle(self.itemSelection[1], forSegmentAt: 1)
+        }
     }
     
     func setInput(to value: String) {
-        
-    }
-}
-
-class SegmentSettingCell: SettingCell {
-    
-    override var type: InputCellType { return .switchCell }
-    
-    override func setInput(to value: String) {
         if value == itemSelection[0] {
             self.segmentedControl.selectedSegmentIndex = 0
         } else if value == itemSelection[1] {
@@ -115,8 +144,7 @@ class SegmentSettingCell: SettingCell {
         self.userInfDelegate?.updateValue(for: userItem, with: self.itemSelection[sender.selectedSegmentIndex])
     }
     
-    override func addInputField() {
-        
+    func addInputField() {
         self.segmentedControl = UISegmentedControl(items: self.itemSelection)
         self.segmentedControl.addTarget(self, action: #selector(Self.segmentChange(_:)), for: .valueChanged)
         self.segmentedControl.translatesAutoresizingMaskIntoConstraints = false
@@ -140,15 +168,18 @@ class SegmentSettingCell: SettingCell {
     }
 }
 
-class TextSettingCell: SettingCell, UITextFieldDelegate {
+class TextSettingCell: SettingCell, SettingCellProtocol, UITextFieldDelegate {
     
-    override var type: InputCellType { return .textCell }
+    var type: InputCellType { return .textCell }
     
-    override func setInput(to value: String) {
+    var inputItem: UIControl { return self.textField }
+    var textField: UITextField!
+    
+    func setInput(to value: String) {
         self.textField.text = value
     }
     
-    override func addInputField() {
+    func addInputField() {
         self.textField = UITextField()
         self.textField.borderStyle = .roundedRect
         self.textField.isUserInteractionEnabled = true
@@ -159,8 +190,6 @@ class TextSettingCell: SettingCell, UITextFieldDelegate {
         self.textField.addTarget(self, action: #selector(Self.textFieldDidChange(_:)), for: .editingChanged)
         self.contentView.addSubview(textField)
             //set constraint on label to keep text centered vertically
-        
-
         
         self.instructionLabel = UILabel()
         self.instructionLabel.translatesAutoresizingMaskIntoConstraints = false
