@@ -240,12 +240,21 @@ class ExperimentEntryController: UIViewController, UserInfoDelegate, UITableView
             experimentData = expData
         } else {
             expInfo[.version] = String(dataDelegate?.nextVersion(for: expInfo[.initials]!) ?? 0)
-            experimentData = ExperimentData(expInfo)
+            let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String  ?? "0"
+            let appBuild = Bundle.main.infoDictionary?["CFBundleVersion"] as? String  ?? "0"
+            experimentData = ExperimentData(expInfo, appVersion: appVersion + "-" + appBuild, deviceType: self.getModelIdentifier())
         }
         
         self.dismiss(animated: true) {
             self.runDelegate?.startExperiment(experimentData)
         }
+    }
+    
+    func getModelIdentifier() -> String {
+        if let simulatorModelIdentifier = ProcessInfo().environment["SIMULATOR_MODEL_IDENTIFIER"] { return simulatorModelIdentifier }
+        var sysinfo = utsname()
+        uname(&sysinfo) // ignore return value
+        return String(bytes: Data(bytes: &sysinfo.machine, count: Int(_SYS_NAMELEN)), encoding: .ascii)!.trimmingCharacters(in: .controlCharacters)
     }
     
 }

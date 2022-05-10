@@ -90,7 +90,7 @@ class GameScene: SKScene, ChoiceDelegate, GameDelegate {
     
     func getMidPoint() -> CGPoint {
         if self.orientation == .vertical {
-            return CGPoint(x: self.frame.center.x, y: self.frame.center.y)
+            return CGPoint(x: self.frame.center.x, y: self.frame.center.y*1.05)
         } else {
             return CGPoint(x: self.frame.center.x, y: self.frame.center.y*0.95)
         }

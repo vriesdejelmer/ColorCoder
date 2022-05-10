@@ -39,8 +39,8 @@ class ExperimentViewController: SubCompViewController, ExitDelegate {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        UIScreen.main.brightness = CGFloat(0.74) //Hacky, but this seems to ensure it works
-        UIScreen.main.brightness = CGFloat(0.75) //Should work best in viewDidAppear
+        UIScreen.main.brightness = CGFloat(0.69) //Hacky, but this seems to ensure it works
+        UIScreen.main.brightness = CGFloat(0.7) //Should work best in viewDidAppear
         self.showInstructions()
         
     }

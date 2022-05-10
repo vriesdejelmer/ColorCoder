@@ -17,6 +17,8 @@ class ExperimentData: Codable {
     var centerDistance: CGFloat
     var stimulusDiameter: CGFloat
     var screenOrientation: ScreenOrientation
+    var appVersion: String
+    var deviceType: String
     
     private var trialNumbers = [Int]()
     private var nodeOffsets = [Int]()
@@ -24,7 +26,7 @@ class ExperimentData: Codable {
     private var targetOffsets = [Int]()
     private var trialResponses = [Int]()
     private var trialTimes = [Double]()
-    private var leftIndices = [Int]()
+    private var leftRotations = [Bool]()
     
     private var comboArray = [TrialParam]()
     
@@ -38,12 +40,14 @@ class ExperimentData: Codable {
         return comboArray.count
     }
     
-    init(_ expInfo: [ExperimentParameter: String]) {
+    init(_ expInfo: [ExperimentParameter: String], appVersion: String, deviceType: String) {
         if let version = expInfo[.version] {
             self.version = Int(version)!
         } else {
             self.version = 0
         }
+        self.appVersion = appVersion
+        self.deviceType = deviceType
         self.initials = expInfo[.initials]!
         self.targetSteps = Int(expInfo[.targetSteps]!)!
         self.nodeOrdering = NodeOrdering(rawValue: expInfo[.nodeOrdering]!)!
@@ -78,7 +82,7 @@ class ExperimentData: Codable {
         }
     }
     
-    func addTrial(number: Int, targetOffset: Int, nodeOffset: Int, trialTime: Double, response: Int, leftIndex: Int, ordering: [Int]) {
+    func addTrial(number: Int, targetOffset: Int, nodeOffset: Int, trialTime: Double, response: Int, leftRotation: Bool, ordering: [Int]) {
         
         if (trialNumbers.count == nodeOffsets.count && trialNumbers.count == trialResponses.count && trialNumbers.count == targetOffsets.count) {
             self.trialNumbers.append(number)
@@ -86,7 +90,7 @@ class ExperimentData: Codable {
             self.trialResponses.append(response)
             self.nodeOffsets.append(nodeOffset)
             self.trialTimes.append(trialTime)
-            self.leftIndices.append(leftIndex)
+            self.leftRotations.append(leftRotation)
             self.nodeOrderings.append(ordering)
         } else {
             fatalError("Crucial Data Collection Error")

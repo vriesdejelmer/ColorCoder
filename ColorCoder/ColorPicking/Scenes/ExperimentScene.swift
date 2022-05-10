@@ -66,7 +66,7 @@ class ExperimentScene: GameScene {
             self.trialTime = CFAbsoluteTimeGetCurrent() - startTime
         }
         
-        self.experimentData.addTrial(number: trialCounter, targetOffset: self.nextTargetStep, nodeOffset: self.nextNodeStep, trialTime: self.trialTime!, response: selectedIndex, leftIndex: self.startIndex, ordering: self.nodeOrdering)
+        self.experimentData.addTrial(number: trialCounter, targetOffset: self.nextTargetStep, nodeOffset: self.nextNodeStep, trialTime: self.trialTime!, response: selectedIndex, leftRotation: self.leftRotation, ordering: self.nodeOrdering)
 
         if self.experimentData.hasTrialsLeft {
             if (self.trialCounter+1) % GeneralSettings.DefaultParams.progressTrials == 0 {
