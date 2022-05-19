@@ -26,7 +26,10 @@ class ExperimentData: Codable {
     private var targetOffsets = [Int]()
     private var trialResponses = [Int]()
     private var trialTimes = [Double]()
+    private var preTrialTimes = [Double]()
     private var leftRotations = [Bool]()
+    private var brightnessChanges = [BrightnessChange]()
+    private var sessionStartTimes = [Double]()
     
     private var comboArray = [TrialParam]()
     
@@ -75,6 +78,10 @@ class ExperimentData: Codable {
         self.trialParam = self.comboArray.remove(at: index)
         return trialParam
     }
+    
+    func addSessionStart(_ startTime: Double) {
+        self.sessionStartTimes.append(startTime)
+    }
         
     func revertLastTrial() {
         if let lastParams = self.trialParam {
@@ -82,10 +89,15 @@ class ExperimentData: Codable {
         }
     }
     
-    func addTrial(number: Int, targetOffset: Int, nodeOffset: Int, trialTime: Double, response: Int, leftRotation: Bool, ordering: [Int]) {
+    func logBrightnessChange(_ brightness: CGFloat) {
+        self.brightnessChanges.append(BrightnessChange(newBrightness: brightness, changeTime: CFAbsoluteTimeGetCurrent()))
+    }
+    
+    func addTrial(number: Int, targetOffset: Int, nodeOffset: Int, trialTime: Double, preTrialTime: Double, response: Int, leftRotation: Bool, ordering: [Int]) {
         
         if (trialNumbers.count == nodeOffsets.count && trialNumbers.count == trialResponses.count && trialNumbers.count == targetOffsets.count) {
             self.trialNumbers.append(number)
+            self.preTrialTimes.append(preTrialTime)
             self.targetOffsets.append(targetOffset)
             self.trialResponses.append(response)
             self.nodeOffsets.append(nodeOffset)
@@ -98,9 +110,16 @@ class ExperimentData: Codable {
     }
     
     
+    
+    
 }
 
 struct TrialParam: Codable {
     let nodeStep: Int
     let targetStep: Int
+}
+
+struct BrightnessChange: Codable {
+    let newBrightness: CGFloat
+    let changeTime: Double
 }

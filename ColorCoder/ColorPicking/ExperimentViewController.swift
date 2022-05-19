@@ -28,6 +28,7 @@ class ExperimentViewController: SubCompViewController, ExitDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         self.setupGameView()
         
         if self.experimentMode == .practice {
@@ -39,10 +40,16 @@ class ExperimentViewController: SubCompViewController, ExitDelegate {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        UIScreen.main.brightness = CGFloat(0.69) //Hacky, but this seems to ensure it works
-        UIScreen.main.brightness = CGFloat(0.7) //Should work best in viewDidAppear
+        UIScreen.main.brightness = CGFloat(GeneralSettings.DefaultParams.brightness-0.01) //Hacky, but this seems to ensure it works
+        UIScreen.main.brightness = CGFloat(GeneralSettings.DefaultParams.brightness) //Should work best in viewDidAppear
         self.showInstructions()
+        NotificationCenter.default.addObserver(self, selector: #selector(brightnessDidChange(_:)),
+           name: UIScreen.brightnessDidChangeNotification, object: nil)
         
+    }
+    
+    @objc func brightnessDidChange(_ notification: Notification) {
+        self.experimentData?.logBrightnessChange(UIScreen.main.brightness)
     }
     
     override func viewWillDisappear(_ animated: Bool) {

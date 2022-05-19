@@ -29,6 +29,7 @@ class ExperimentScene: GameScene {
         didSet {
             self.stimulusDiameter = experimentData.stimulusDiameter
             self.centerDistance = experimentData.centerDistance
+            self.experimentData.addSessionStart(CFAbsoluteTimeGetCurrent())
         }
     }
     
@@ -37,13 +38,16 @@ class ExperimentScene: GameScene {
     }
     
         // timing
-    var trialTime: TimeInterval?
+    var trialSetupTime: TimeInterval?
     var trialStartTime: TimeInterval?
+    var trialTime: TimeInterval?
+    var initiationTime: TimeInterval?
 
     override func didMove(to view: SKView) {
         view.showsPhysics   = false
         
         super.didMove(to: view)
+        
     }
     
     override func setNextTrialParameters() {
@@ -58,15 +62,26 @@ class ExperimentScene: GameScene {
         }
         
     }
+    
+    override func setupNextTrial() {
+        self.trialSetupTime = CFAbsoluteTimeGetCurrent()
+        super.setupNextTrial()
+    }
 
+    func logTimes() {
+        if let startTime = self.trialStartTime {
+            self.trialTime = CFAbsoluteTimeGetCurrent() - startTime
+            if let setupTime = self.trialSetupTime {
+                self.initiationTime = startTime - setupTime
+            }
+        }
+    }
 
     override func selected(_ selectedIndex: Int) {
 
-        if let startTime = self.trialStartTime {
-            self.trialTime = CFAbsoluteTimeGetCurrent() - startTime
-        }
+        self.logTimes()
         
-        self.experimentData.addTrial(number: trialCounter, targetOffset: self.nextTargetStep, nodeOffset: self.nextNodeStep, trialTime: self.trialTime!, response: selectedIndex, leftRotation: self.leftRotation, ordering: self.nodeOrdering)
+        self.experimentData.addTrial(number: trialCounter, targetOffset: self.nextTargetStep, nodeOffset: self.nextNodeStep, trialTime: self.trialTime ?? 0.0, preTrialTime: self.initiationTime ?? 0.0, response: selectedIndex, leftRotation: self.leftRotation, ordering: self.nodeOrdering)
 
         if self.experimentData.hasTrialsLeft {
             if (self.trialCounter+1) % GeneralSettings.DefaultParams.progressTrials == 0 {

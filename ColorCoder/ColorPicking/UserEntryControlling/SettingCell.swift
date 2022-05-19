@@ -103,14 +103,6 @@ extension SettingCellProtocol {
 
 }
 
-//class OrientationCell: SegmentSettingCell {
-//    override var itemSelection: [String]! { return [ScreenOrientation.horizontal.rawValue, ScreenOrientation.vertical.rawValue] }
-//}
-//
-//class NodeOrderingCell: SegmentSettingCell {
-//    override var itemSelection: [String]! { return [NodeOrdering.leftToRight.rawValue, NodeOrdering.shuffled.rawValue] }
-//}
-
 class SegmentSettingCell: SettingCell, SettingCellProtocol {
     
     var type: InputCellType { return .switchCell }

@@ -19,6 +19,7 @@ public class GeneralSettings {
         public static let centerRingWidth: CGFloat = 25
         public static let targetSteps = 35
         public static let nodeSteps = 35
+        public static let brightness = 0.7
     }
     
     public struct Constants {
@@ -51,7 +52,7 @@ public class GeneralSettings {
             if let orderingString = defaults.string(forKey: SettingsKey.nodeOrdering), let nodeOrder = NodeOrdering(rawValue: orderingString) {
                 return nodeOrder
             } else {
-                return .leftToRight
+                return .shuffled
             }
         }
     }
@@ -62,7 +63,7 @@ public class GeneralSettings {
             if let orientationString = defaults.string(forKey: SettingsKey.screenRotation), let orientation = ScreenOrientation(rawValue: orientationString) {
                 return orientation
             } else {
-                return .horizontal
+                return .vertical
             }
         }
     }
