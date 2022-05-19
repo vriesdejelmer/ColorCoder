@@ -171,7 +171,7 @@ extension ExperimentViewController: DisplayDelegate {
     }
 
     func showInstructions() {
-        let instructionAlert = UIAlertController(title: "Instructions, Please Read", message: "Welcome to the experiment! Each trial starts upon placing the finger in the center ring, which will change in color. Upon this color change, please select, from the surroundings disks, the disk that is most similar (?) in color. While it is not important to be as fast as possible, please do not overthink and try to respond promptly.", preferredStyle: .alert)
+        let instructionAlert = UIAlertController(title: "Instructions, Please Read", message: "Welcome to the experiment! Start a trial by placing the finger in the center ring, it will shrink and change color. Upon the color change, please select, from the surroundings disks, the colored disk that appears most similar most to the central color. You can complete the experiment at a rapid pace, but please try to minimize the number of errors.", preferredStyle: .alert)
         
         instructionAlert.addAction(UIAlertAction(title: "Let's Do It", style: .default) {_ in
             self.displayWarningIfNeeded()
